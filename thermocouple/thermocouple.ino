@@ -1,29 +1,75 @@
+#include <U8g2lib.h>
+#include <U8x8lib.h>
+
+
 #include <SPI.h>
+
     #include "Adafruit_MAX31855.h"
  
-    #define DO   3
-    #define CS   4
-    #define CLK  5
-    Adafruit_MAX31855 thermocouple(CLK, CS, DO);
+    #define DO   7
+    #define CS1   9
+    #define CS2   10
+    #define CLK  8
+    Adafruit_MAX31855 thermocouple1(CLK, CS1, DO);
+    Adafruit_MAX31855 thermocouple2(CLK, CS2, DO);
+
+   // U8GLIB_SSD1306_128X32 u8g(U8G_I2C_OPT_NONE);  // I2C / TWI
+    
+U8G2_SSD1306_128X32_UNIVISION_1_HW_I2C u8g2(U8G2_R0, /* reset=*/ U8X8_PIN_NONE, /* clock=*/ SCL, /* data=*/ SDA);   // pin remapping with ESP8266 HW I2C
+void draw(long inp) {
+  // graphic commands to redraw the complete screen should be placed here
+  u8g2.setFont(u8g_font_courB18);
+  // u8g.setFont(u8g_font_osb21);
+  u8g2.drawStr( 0, 20, "mystring");
+  u8g2.firstPage();
+  do {
+    u8g2.setFont(u8g2_font_ncenB10_tr);
+    char buf[12];
+    u8g2.drawStr(0,24,ltoa(inp,buf,10));
+  } while ( u8g2.nextPage() );
+}
  
     void setup() {
        SerialUSB.begin(9600);
        SerialUSB.println("MAX31855 test");
        // wait for MAX chip to stabilize
+       u8g2.begin();
        delay(500);
     }
     void loop() {
+      
        // Initialize variables.
         // Counter for arrays
-       double internalTemp = thermocouple.readInternal(); // Read the internal temperature of the MAX31855.
-       double rawTemp = thermocouple.readCelsius(); // Read the temperature of the thermocouple. This temp is compensated for cold junction temperature.
+       double internalTemp = thermocouple1.readInternal(); // Read the internal temperature of the MAX31855.
+       double rawTemp = thermocouple1.readCelsius(); // Read the temperature of the thermocouple. This temp is compensated for cold junction temperature.
        
   double  correctedTemp =  calc_temp(internalTemp, rawTemp);
  
-  SerialUSB.print("Corrected Temp = ");
+  SerialUSB.print("Corrected Temp1 = ");
           SerialUSB.println(correctedTemp, 5);
+          SerialUSB.print("internal temp: ");
+          SerialUSB.print(internalTemp, 5);
+          SerialUSB.print(" err: ");
+          SerialUSB.print(thermocouple1.readError());
           SerialUSB.println("");
+          
+           internalTemp = thermocouple2.readInternal(); // Read the internal temperature of the MAX31855.
+        rawTemp = thermocouple1.readCelsius(); // Read the temperature of the thermocouple. This temp is compensated for cold junction temperature.
+       
+   correctedTemp =  calc_temp(internalTemp, rawTemp);
  
+  SerialUSB.print("Corrected Temp2 = ");
+          SerialUSB.println(correctedTemp, 5);
+          SerialUSB.print("internal temp: ");
+          SerialUSB.print(internalTemp, 5);
+         SerialUSB.print(" err: ");
+          SerialUSB.print(thermocouple2.readError());
+          SerialUSB.println("");
+           SerialUSB.print(" analog A0:");
+            
+              long volt = analogRead(A0)*((47+5700)/47)*(3.3/1024);
+              SerialUSB.println(volt);
+ draw( volt);
        delay(1000);
  
     }
