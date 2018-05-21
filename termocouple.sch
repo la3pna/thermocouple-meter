@@ -8864,8 +8864,6 @@ Source: http://eshop.phoenixcontact.com .. 1751248.pdf</description>
 <part name="IC3" library="adafruit" deviceset="MAX6675" device=""/>
 <part name="IC4" library="adafruit" deviceset="MAX6675" device=""/>
 <part name="+3V1" library="supply1" deviceset="+3V3" device=""/>
-<part name="+3V2" library="supply1" deviceset="+3V3" device=""/>
-<part name="+3V3" library="supply1" deviceset="+3V3" device=""/>
 <part name="GND1" library="supply1" deviceset="GND" device=""/>
 <part name="GND2" library="supply1" deviceset="GND" device=""/>
 <part name="GND3" library="supply1" deviceset="GND" device=""/>
@@ -8900,6 +8898,7 @@ Source: http://eshop.phoenixcontact.com .. 1751248.pdf</description>
 <part name="X3" library="con-phoenix-350" deviceset="1751248" device=""/>
 <part name="X4" library="con-phoenix-350" deviceset="1751248" device=""/>
 <part name="X5" library="con-phoenix-350" deviceset="1751248" device=""/>
+<part name="+3V6" library="supply1" deviceset="+3V3" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -8918,8 +8917,6 @@ panel</text>
 <instance part="IC3" gate="G$1" x="-5.08" y="45.72"/>
 <instance part="IC4" gate="G$1" x="-5.08" y="22.86"/>
 <instance part="+3V1" gate="G$1" x="-25.4" y="78.74" rot="R90"/>
-<instance part="+3V2" gate="G$1" x="55.88" y="45.72" rot="R90"/>
-<instance part="+3V3" gate="G$1" x="99.06" y="58.42"/>
 <instance part="GND1" gate="1" x="86.36" y="81.28"/>
 <instance part="GND2" gate="1" x="-20.32" y="71.12" rot="R270"/>
 <instance part="GND3" gate="1" x="-20.32" y="48.26" rot="R270"/>
@@ -8967,6 +8964,7 @@ panel</text>
 <instance part="X4" gate="-2" x="-45.72" y="45.72" rot="R180"/>
 <instance part="X5" gate="-1" x="-45.72" y="15.24" rot="R180"/>
 <instance part="X5" gate="-2" x="-45.72" y="25.4" rot="R180"/>
+<instance part="+3V6" gate="G$1" x="142.24" y="101.6"/>
 </instances>
 <busses>
 </busses>
@@ -9034,16 +9032,17 @@ panel</text>
 <junction x="-22.86" y="78.74"/>
 </segment>
 <segment>
-<pinref part="U$1" gate="G$1" pin="3.3V"/>
-<pinref part="+3V2" gate="G$1" pin="+3V3"/>
-</segment>
-<segment>
-<pinref part="U$1" gate="G$1" pin="3V3"/>
-<pinref part="+3V3" gate="G$1" pin="+3V3"/>
-</segment>
-<segment>
 <pinref part="X1" gate="-1" pin="1"/>
 <pinref part="+3V4" gate="G$1" pin="+3V3"/>
+</segment>
+<segment>
+<pinref part="U2" gate="U1" pin="VOUT"/>
+<label x="139.7" y="101.6" size="1.778" layer="95"/>
+<pinref part="C4" gate="G$1" pin="1"/>
+<wire x1="137.16" y1="99.06" x2="142.24" y2="99.06" width="0.1524" layer="91"/>
+<wire x1="142.24" y1="99.06" x2="142.24" y2="96.52" width="0.1524" layer="91"/>
+<pinref part="+3V6" gate="G$1" pin="+3V3"/>
+<junction x="142.24" y="99.06"/>
 </segment>
 </net>
 <net name="GND" class="0">
@@ -9248,15 +9247,6 @@ panel</text>
 <wire x1="129.54" y1="45.72" x2="129.54" y2="43.18" width="0.1524" layer="91"/>
 <pinref part="X1" gate="-5" pin="1"/>
 <wire x1="129.54" y1="43.18" x2="152.4" y2="43.18" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="3V3" class="0">
-<segment>
-<pinref part="U2" gate="U1" pin="VOUT"/>
-<label x="139.7" y="101.6" size="1.778" layer="95"/>
-<pinref part="C4" gate="G$1" pin="1"/>
-<wire x1="137.16" y1="99.06" x2="142.24" y2="99.06" width="0.1524" layer="91"/>
-<wire x1="142.24" y1="99.06" x2="142.24" y2="96.52" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$13" class="0">
