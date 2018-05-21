@@ -8989,6 +8989,7 @@ panel</text>
 <wire x1="104.14" y1="22.86" x2="104.14" y2="5.08" width="0.1524" layer="91"/>
 <wire x1="104.14" y1="5.08" x2="20.32" y2="5.08" width="0.1524" layer="91"/>
 <wire x1="20.32" y1="5.08" x2="20.32" y2="20.32" width="0.1524" layer="91"/>
+<junction x="20.32" y="20.32"/>
 </segment>
 </net>
 <net name="N$2" class="0">
@@ -8998,7 +8999,6 @@ panel</text>
 <wire x1="17.78" y1="15.24" x2="17.78" y2="38.1" width="0.1524" layer="91"/>
 <wire x1="17.78" y1="38.1" x2="17.78" y2="60.96" width="0.1524" layer="91"/>
 <wire x1="17.78" y1="60.96" x2="17.78" y2="83.82" width="0.1524" layer="91"/>
-<wire x1="17.78" y1="83.82" x2="7.62" y2="83.82" width="0.1524" layer="91"/>
 <pinref part="IC3" gate="G$1" pin="SCK"/>
 <wire x1="10.16" y1="38.1" x2="17.78" y2="38.1" width="0.1524" layer="91"/>
 <pinref part="IC2" gate="G$1" pin="SCK"/>
@@ -9010,6 +9010,9 @@ panel</text>
 <wire x1="106.68" y1="2.54" x2="106.68" y2="25.4" width="0.1524" layer="91"/>
 <pinref part="U$1" gate="G$1" pin="D4"/>
 <wire x1="99.06" y1="25.4" x2="106.68" y2="25.4" width="0.1524" layer="91"/>
+<junction x="17.78" y="15.24"/>
+<pinref part="IC1" gate="G$1" pin="SCK"/>
+<wire x1="10.16" y1="83.82" x2="17.78" y2="83.82" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="+3V3" class="0">
