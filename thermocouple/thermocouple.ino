@@ -1,14 +1,19 @@
-#include <U8g2lib.h>
-#include <U8x8lib.h>
+ #include <U8g2lib.h>
+ #include <U8x8lib.h>
+ #include <avr/dtostrf.h>
+ #include <SPI.h>
+  #include <scpiparser.h>
+ #include "Adafruit_MAX31855.h"
 
-
-#include <SPI.h>
-
-    #include "Adafruit_MAX31855.h"
+  //  #define use4 // Undefine for only 2 thermocouple amplifiers
  
     #define DO   7
     #define CS1   9
     #define CS2   10
+    #ifdef use4
+    #define CS3   11
+    #define CS4   12
+    #endif
     #define CLK  8
     Adafruit_MAX31855 thermocouple1(CLK, CS1, DO);
     Adafruit_MAX31855 thermocouple2(CLK, CS2, DO);
@@ -16,20 +21,52 @@
    // U8GLIB_SSD1306_128X32 u8g(U8G_I2C_OPT_NONE);  // I2C / TWI
     
 U8G2_SSD1306_128X32_UNIVISION_1_HW_I2C u8g2(U8G2_R0, /* reset=*/ U8X8_PIN_NONE, /* clock=*/ SCL, /* data=*/ SDA);   // pin remapping with ESP8266 HW I2C
-void draw(long inp) {
+
+struct scpi_parser_context ctx;
+
+scpi_error_t identify(struct scpi_parser_context* context, struct scpi_token* command);
+scpi_error_t reset(struct scpi_parser_context* context, struct scpi_token* command);
+scpi_error_t get_voltage(struct scpi_parser_context* context, struct scpi_token* command);
+scpi_error_t get_temp_1(struct scpi_parser_context* context, struct scpi_token* command);
+scpi_error_t get_temp_2(struct scpi_parser_context* context, struct scpi_token* command);
+scpi_error_t get_temp_3(struct scpi_parser_context* context, struct scpi_token* command);
+scpi_error_t get_temp_4(struct scpi_parser_context* context, struct scpi_token* command);
+scpi_error_t set_voltage_2(struct scpi_parser_context* context, struct scpi_token* command);
+
+  double temp1;
+  double temp2;
+  #ifdef use4
+  double temp3;
+  double temp4;
+  #endif
+
+
+
+void draw(float temp1, float temp2, float temp3, float temp4 ) {
   // graphic commands to redraw the complete screen should be placed here
-  u8g2.setFont(u8g_font_courB18);
-  // u8g.setFont(u8g_font_osb21);
-  u8g2.drawStr( 0, 20, "mystring");
+
   u8g2.firstPage();
   do {
-    u8g2.setFont(u8g2_font_ncenB10_tr);
-    char buf[12];
-    u8g2.drawStr(0,24,ltoa(inp,buf,10));
+    u8g2.setFont(u8g2_font_ncenB12_tr);
+    // u8g2.setFont(u8g2_font_courB18);
+//   u8g2.setFont(u8g2_font_osb21);
+    char buf[12] ="";
+    #ifdef use4
+    u8g2.drawStr(0,14,dtostrf(temp1, 5, 2, buf));
+    u8g2.drawStr(80,14,dtostrf(temp2, 5, 2, buf));
+    u8g2.drawStr(0,31,dtostrf(temp3, 5, 2, buf));
+    u8g2.drawStr(80,31,dtostrf(temp4, 5, 2, buf));
+    #else
+    u8g2.drawStr(0,22,dtostrf(temp1, 5, 2, buf));
+    u8g2.drawStr(80,22,dtostrf(temp2, 5, 2, buf));
+    #endif
   } while ( u8g2.nextPage() );
 }
+
+
  
     void setup() {
+      setup_scpi();
        SerialUSB.begin(9600);
        SerialUSB.println("MAX31855 test");
        // wait for MAX chip to stabilize
@@ -40,36 +77,45 @@ void draw(long inp) {
       
        // Initialize variables.
         // Counter for arrays
-       double internalTemp = thermocouple1.readInternal(); // Read the internal temperature of the MAX31855.
-       double rawTemp = thermocouple1.readCelsius(); // Read the temperature of the thermocouple. This temp is compensated for cold junction temperature.
+       double internalTemp1 = thermocouple1.readInternal(); // Read the internal temperature of the MAX31855.
+       double rawTemp1 = thermocouple1.readCelsius(); // Read the temperature of the thermocouple. This temp is compensated for cold junction temperature.
        
-  double  correctedTemp =  calc_temp(internalTemp, rawTemp);
+  double  correctedTemp =  calc_temp(internalTemp1, rawTemp1);
  
   SerialUSB.print("Corrected Temp1 = ");
-          SerialUSB.println(correctedTemp, 5);
-          SerialUSB.print("internal temp: ");
-          SerialUSB.print(internalTemp, 5);
+          SerialUSB.print(correctedTemp, 5);
+          SerialUSB.print(" internal temp: ");
+          SerialUSB.print(internalTemp1, 5);
+          SerialUSB.print(" raw temp: ");
+          SerialUSB.print(rawTemp1, 5);
           SerialUSB.print(" err: ");
-          SerialUSB.print(thermocouple1.readError());
-          SerialUSB.println("");
+          SerialUSB.println(thermocouple1.readError());
+         
           
-           internalTemp = thermocouple2.readInternal(); // Read the internal temperature of the MAX31855.
-        rawTemp = thermocouple1.readCelsius(); // Read the temperature of the thermocouple. This temp is compensated for cold junction temperature.
+       double    internalTemp2 = thermocouple2.readInternal(); // Read the internal temperature of the MAX31855.
+      double  rawTemp2 = thermocouple2.readCelsius(); // Read the temperature of the thermocouple. This temp is compensated for cold junction temperature.
        
-   correctedTemp =  calc_temp(internalTemp, rawTemp);
+   correctedTemp = internalTemp2;// calc_temp(internalTemp, rawTemp);
  
   SerialUSB.print("Corrected Temp2 = ");
-          SerialUSB.println(correctedTemp, 5);
-          SerialUSB.print("internal temp: ");
-          SerialUSB.print(internalTemp, 5);
+          SerialUSB.print(correctedTemp, 5);
+          SerialUSB.print(" internal temp: ");
+          SerialUSB.print(internalTemp2, 5);
+          SerialUSB.print(" raw temp: ");
+          SerialUSB.print(rawTemp2, 5);
          SerialUSB.print(" err: ");
           SerialUSB.print(thermocouple2.readError());
-          SerialUSB.println("");
+          SerialUSB.print("  ");
            SerialUSB.print(" analog A0:");
+           
             
-              long volt = analogRead(A0)*((47+5700)/47)*(3.3/1024);
+              float volt = analogRead(A0)*((47+5700)/47)*(3.3/1024);
               SerialUSB.println(volt);
- draw( volt);
+ #ifdef use4         
+ draw( rawTemp1, rawTemp2, internalTemp1, internalTemp2);
+ #else
+ draw( rawTemp1, rawTemp2, NAN, NAN);
+ #endif
        delay(1000);
  
     }
@@ -164,4 +210,97 @@ void draw(long inp) {
          
        }
     }
+
+void setup_scpi(){
+  
+  struct scpi_command* trigger;
+  struct scpi_command* measure;
+  struct scpi_command* systems;
+  struct scpi_command* unit;
+  
+  /* First, initialise the parser. */
+  scpi_init(&ctx);
+
+  /*
+   * After initialising the parser, we set up the command tree.  Ours is
+   *
+   *  *IDN?         -> identify
+   *  *RST          -> reset to local
+   *  :TRIGger
+   *    :VOLTage    -> set_voltage
+   *    :VOLTage1   -> set_voltage_2
+   *  :MEASure
+   *    :VOLTage?   -> get_voltage
+   *    :VOLTage1?  -> get_voltage_2
+   *    :VOLTage2?  -> get_voltage_3
+   *  :SYSTem
+   *    :VOLTage?   -> get_voltage
+   *  :UNIT
+   *    :TEMPerature -> set_temperature_unit (C/CEL/F/FAR/K/KEL)
+   *    :TEMPerature? -> get_temprature unit (C/CEL/F/FAR/K/KEL)
+   */
+  scpi_register_command(ctx.command_tree, SCPI_CL_SAMELEVEL, "*IDN?", 5, "*IDN?", 5, identify);
+  scpi_register_command(ctx.command_tree, SCPI_CL_SAMELEVEL, "*RST", 4, "*RST", 4, reset);
+
+  trigger = scpi_register_command(ctx.command_tree, SCPI_CL_CHILD, "TRIGger", 7, "TRIG", 4, NULL);
+  measure = scpi_register_command(ctx.command_tree, SCPI_CL_CHILD, "MEASure", 7, "MEAS", 4, NULL);
+  systems = scpi_register_command(ctx.command_tree, SCPI_CL_CHILD, "SYSTem", 6, "SYST", 4, NULL);
+  unit = scpi_register_command(ctx.command_tree, SCPI_CL_CHILD, "UNIT", 4, "UNIT", 4, NULL);
+
+
+  scpi_register_command(trigger, SCPI_CL_CHILD, "SINGle", 7, "SING", 4, set_voltage);
+ // scpi_register_command(trigger, SCPI_CL_CHILD, "CONTinous", 8, "CONT", 5, set_voltage_2);
+
+  scpi_register_command(measure, SCPI_CL_CHILD, "VOLTAGE?", 8, "VOLT?", 5, get_voltage);
+//  scpi_register_command(measure, SCPI_CL_CHILD, "VOLTAGE1?", 9, "VOLT1?", 6, get_voltage_2);
+//  scpi_register_command(measure, SCPI_CL_CHILD, "VOLTAGE2?", 9, "VOLT2?", 6, get_voltage_3);
+   
+//  scpi_register_command(unit, SCPI_CL_CHILD, "TEMPerature", 11, "TEMP", 4, get_voltage_3);
+//  scpi_register_command(unit, SCPI_CL_CHILD, "TEMPerature?", 12, "TEMP?", 5, get_voltage_3);
+
+  scpi_register_command(systems, SCPI_CL_CHILD, "ERRor?", 6, "ERR?", 4, get_err);
+ // scpi_register_command(systems, SCPI_CL_CHILD, "ERRor?", 6, "ERR?", 4, get_err);
+
+  }
+
+  scpi_error_t identify(struct scpi_parser_context* context, struct scpi_token* command)
+{
+  scpi_free_tokens(command);
+
+  SerialUSB.println("OIC,Embedded SCPI Example,1,10");
+  return SCPI_SUCCESS;
+}
+
+scpi_error_t reset(struct scpi_parser_context* context, struct scpi_token* command)
+{
+  scpi_free_tokens(command);
+ setup();
+  //Serial.println("OIC,Embedded SCPI Example,1,10");
+  return SCPI_SUCCESS;
+}
+
+scpi_error_t get_voltage(struct scpi_parser_context* context, struct scpi_token* command)
+{
+  scpi_free_tokens(command);
+ setup();
+  //Serial.println("OIC,Embedded SCPI Example,1,10");
+  return SCPI_SUCCESS;
+}
+
+scpi_error_t set_voltage(struct scpi_parser_context* context, struct scpi_token* command)
+{
+  scpi_free_tokens(command);
+ setup();
+  //Serial.println("OIC,Embedded SCPI Example,1,10");
+  return SCPI_SUCCESS;
+}
+
+scpi_error_t get_err(struct scpi_parser_context* context, struct scpi_token* command)
+{
+  scpi_free_tokens(command);
+ setup();
+  //Serial.println("OIC,Embedded SCPI Example,1,10");
+  return SCPI_SUCCESS;
+}
+
 
