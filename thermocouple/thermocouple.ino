@@ -47,18 +47,22 @@ void draw(float temp1, float temp2, float temp3, float temp4 ) {
 
   u8g2.firstPage();
   do {
-    u8g2.setFont(u8g2_font_ncenB12_tr);
+    u8g2.setFont(u8g2_font_ncenB10_tr);
     // u8g2.setFont(u8g2_font_courB18);
 //   u8g2.setFont(u8g2_font_osb21);
     char buf[12] ="";
     #ifdef use4
     u8g2.drawStr(0,14,dtostrf(temp1, 5, 2, buf));
-    u8g2.drawStr(80,14,dtostrf(temp2, 5, 2, buf));
+    u8g2.drawStr(70,14,dtostrf(temp2, 5, 2, buf));
     u8g2.drawStr(0,31,dtostrf(temp3, 5, 2, buf));
-    u8g2.drawStr(80,31,dtostrf(temp4, 5, 2, buf));
+    u8g2.drawStr(70,31,dtostrf(temp4, 5, 2, buf));
     #else
-    u8g2.drawStr(0,22,dtostrf(temp1, 5, 2, buf));
-    u8g2.drawStr(80,22,dtostrf(temp2, 5, 2, buf));
+    
+    u8g2.drawStr(0,25,dtostrf(temp1, 4, 2, buf));
+    u8g2.drawStr(70,25,dtostrf(temp2, 4, 2, buf));
+    u8g2.setFont(u8g2_font_ncenB08_tr);
+    u8g2.drawStr(0,8,"1:");
+    u8g2.drawStr(70,8,"2:");
     #endif
   } while ( u8g2.nextPage() );
 }
@@ -80,7 +84,7 @@ void draw(float temp1, float temp2, float temp3, float temp4 ) {
        double internalTemp1 = thermocouple1.readInternal(); // Read the internal temperature of the MAX31855.
        double rawTemp1 = thermocouple1.readCelsius(); // Read the temperature of the thermocouple. This temp is compensated for cold junction temperature.
        
-  double  correctedTemp =  calc_temp(internalTemp1, rawTemp1);
+  double  correctedTemp = rawTemp1; // calc_temp(internalTemp1, rawTemp1);
  
   SerialUSB.print("Corrected Temp1 = ");
           SerialUSB.print(correctedTemp, 5);
@@ -115,10 +119,17 @@ void draw(float temp1, float temp2, float temp3, float temp4 ) {
  draw( rawTemp1, rawTemp2, internalTemp1, internalTemp2);
  #else
  draw( rawTemp1, rawTemp2, NAN, NAN);
+ //draw( 1200.90f, -1200.023f, NAN, NAN);
  #endif
        delay(1000);
  
     }
+
+
+
+
+
+    
 
     double calc_temp(double internalTemp,double rawTemp ){
 
@@ -302,5 +313,6 @@ scpi_error_t get_err(struct scpi_parser_context* context, struct scpi_token* com
   //Serial.println("OIC,Embedded SCPI Example,1,10");
   return SCPI_SUCCESS;
 }
+
 
 
