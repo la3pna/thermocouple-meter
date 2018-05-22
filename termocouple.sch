@@ -209,6 +209,15 @@
 <wire x1="2.54" y1="-27.94" x2="2.54" y2="-26.67" width="0.127" layer="21"/>
 <text x="-5.08" y="-24.13" size="1.27" layer="21">Emphyrean</text>
 </package>
+<package name="THERMOCOUPLE">
+<hole x="0.9525" y="-5.3975" drill="2.2"/>
+<wire x1="-7.62" y1="-12.3825" x2="9.8425" y2="-12.3825" width="0.127" layer="21"/>
+<wire x1="9.8425" y1="-12.3825" x2="9.8425" y2="11.43" width="0.127" layer="21"/>
+<wire x1="9.8425" y1="11.43" x2="-7.62" y2="11.43" width="0.127" layer="21"/>
+<wire x1="-7.62" y1="11.43" x2="-7.62" y2="-12.3825" width="0.127" layer="21"/>
+<pad name="NEG" x="-3.4925" y="2.54" drill="2.2" shape="square"/>
+<pad name="POS" x="5.715" y="2.54" drill="2.2" shape="square"/>
+</package>
 </packages>
 <symbols>
 <symbol name="EMPHYREAN">
@@ -254,6 +263,14 @@
 <pin name="MISO" x="-7.62" y="-25.4" length="middle" rot="R90"/>
 <pin name="SCK" x="-5.08" y="-25.4" length="middle" rot="R90"/>
 </symbol>
+<symbol name="THERMOCOUPLE">
+<pin name="POS" x="-5.08" y="10.16" length="middle"/>
+<pin name="NEG" x="-5.08" y="5.08" length="middle"/>
+<wire x1="0" y1="12.7" x2="12.7" y2="12.7" width="0.254" layer="94"/>
+<wire x1="12.7" y1="12.7" x2="12.7" y2="2.54" width="0.254" layer="94"/>
+<wire x1="12.7" y1="2.54" x2="0" y2="2.54" width="0.254" layer="94"/>
+<wire x1="0" y1="2.54" x2="0" y2="12.7" width="0.254" layer="94"/>
+</symbol>
 </symbols>
 <devicesets>
 <deviceset name="EPHYREAN">
@@ -296,6 +313,22 @@
 <connect gate="G$1" pin="SCL" pad="SCL"/>
 <connect gate="G$1" pin="SDA" pad="SDA"/>
 <connect gate="G$1" pin="VIN" pad="VIN"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="THERMOCOUPLE">
+<gates>
+<gate name="G$1" symbol="THERMOCOUPLE" x="-5.08" y="-7.62"/>
+</gates>
+<devices>
+<device name="" package="THERMOCOUPLE">
+<connects>
+<connect gate="G$1" pin="NEG" pad="NEG"/>
+<connect gate="G$1" pin="POS" pad="POS"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -8945,6 +8978,8 @@ Source: http://eshop.phoenixcontact.com .. 1751248.pdf</description>
 <part name="+3V6" library="supply1" deviceset="+3V3" device=""/>
 <part name="X6" library="con-phoenix-254" deviceset="MPT3" device=""/>
 <part name="GND14" library="supply1" deviceset="GND" device=""/>
+<part name="U$2" library="mine" deviceset="THERMOCOUPLE" device=""/>
+<part name="U$3" library="mine" deviceset="THERMOCOUPLE" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -9015,6 +9050,8 @@ panel</text>
 <instance part="X6" gate="-2" x="53.34" y="20.32" rot="R180"/>
 <instance part="X6" gate="-3" x="53.34" y="22.86" rot="R180"/>
 <instance part="GND14" gate="1" x="55.88" y="15.24"/>
+<instance part="U$2" gate="G$1" x="-38.1" y="-7.62" rot="MR0"/>
+<instance part="U$3" gate="G$1" x="-68.58" y="-2.54" rot="MR0"/>
 </instances>
 <busses>
 </busses>
