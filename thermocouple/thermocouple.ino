@@ -39,7 +39,7 @@ scpi_error_t set_voltage_2(struct scpi_parser_context* context, struct scpi_toke
   double temp3;
   double temp4;
   #endif
-
+  boolean contTrigger = true;
 
 
 void draw(float temp1, float temp2, float temp3, float temp4 ) {
@@ -77,7 +77,17 @@ void draw(float temp1, float temp2, float temp3, float temp4 ) {
        u8g2.begin();
        delay(500);
     }
+    
+ char line_buffer[256];
+  unsigned char read_length;
+    
     void loop() {
+
+      read_length = SerialUSB.readBytesUntil('\n', line_buffer, 256);
+    if(read_length > 0)
+    {
+      scpi_execute_command(&ctx, line_buffer, read_length);
+    }
       
        // Initialize variables.
         // Counter for arrays
@@ -85,7 +95,7 @@ void draw(float temp1, float temp2, float temp3, float temp4 ) {
        double rawTemp1 = thermocouple1.readCelsius(); // Read the temperature of the thermocouple. This temp is compensated for cold junction temperature.
        
   double  correctedTemp = rawTemp1; // calc_temp(internalTemp1, rawTemp1);
- 
+ if(contTrigger){  
   SerialUSB.print("Corrected Temp1 = ");
           SerialUSB.print(correctedTemp, 5);
           SerialUSB.print(" internal temp: ");
@@ -94,13 +104,13 @@ void draw(float temp1, float temp2, float temp3, float temp4 ) {
           SerialUSB.print(rawTemp1, 5);
           SerialUSB.print(" err: ");
           SerialUSB.println(thermocouple1.readError());
-         
+ }    
           
        double    internalTemp2 = thermocouple2.readInternal(); // Read the internal temperature of the MAX31855.
       double  rawTemp2 = thermocouple2.readCelsius(); // Read the temperature of the thermocouple. This temp is compensated for cold junction temperature.
        
    correctedTemp = internalTemp2;// calc_temp(internalTemp, rawTemp);
- 
+ if(contTrigger){  
   SerialUSB.print("Corrected Temp2 = ");
           SerialUSB.print(correctedTemp, 5);
           SerialUSB.print(" internal temp: ");
@@ -115,12 +125,18 @@ void draw(float temp1, float temp2, float temp3, float temp4 ) {
             
               float volt = analogRead(A0)*((47+5700)/47)*(3.3/1024);
               SerialUSB.println(volt);
+              SerialUSB.println(contTrigger);
+
+    }
+
+  if(contTrigger){            
  #ifdef use4         
  draw( rawTemp1, rawTemp2, internalTemp1, internalTemp2);
  #else
  draw( rawTemp1, rawTemp2, NAN, NAN);
- //draw( 1200.90f, -1200.023f, NAN, NAN);
+ //draw( 1200.90f, -1200.023f, NAN, NAN); // used to test display formatting
  #endif
+  }
        delay(1000);
  
     }
@@ -259,8 +275,8 @@ void setup_scpi(){
   unit = scpi_register_command(ctx.command_tree, SCPI_CL_CHILD, "UNIT", 4, "UNIT", 4, NULL);
 
 
-  scpi_register_command(trigger, SCPI_CL_CHILD, "SINGle", 7, "SING", 4, set_voltage);
- // scpi_register_command(trigger, SCPI_CL_CHILD, "CONTinous", 8, "CONT", 5, set_voltage_2);
+  scpi_register_command(trigger, SCPI_CL_CHILD, "SINGle", 6, "SING", 4, trig_single);
+  scpi_register_command(trigger, SCPI_CL_CHILD, "CONTinous", 9, "CONT", 4, trig_cont);
 
   scpi_register_command(measure, SCPI_CL_CHILD, "VOLTAGE?", 8, "VOLT?", 5, get_voltage);
 //  scpi_register_command(measure, SCPI_CL_CHILD, "VOLTAGE1?", 9, "VOLT1?", 6, get_voltage_2);
@@ -270,7 +286,9 @@ void setup_scpi(){
 //  scpi_register_command(unit, SCPI_CL_CHILD, "TEMPerature?", 12, "TEMP?", 5, get_voltage_3);
 
   scpi_register_command(systems, SCPI_CL_CHILD, "ERRor?", 6, "ERR?", 4, get_err);
- // scpi_register_command(systems, SCPI_CL_CHILD, "ERRor?", 6, "ERR?", 4, get_err);
+  scpi_register_command(systems, SCPI_CL_CHILD, "VOLTage?", 8, "VOLT?", 4, get_voltage);
+  scpi_register_command(systems, SCPI_CL_CHILD, "PRINT", 5, "PRINT", 5, display_print);
+
 
   }
 
@@ -285,15 +303,34 @@ void setup_scpi(){
 scpi_error_t reset(struct scpi_parser_context* context, struct scpi_token* command)
 {
   scpi_free_tokens(command);
- setup();
+  SerialUSB.println("resetting");
+   NVIC_SystemReset();
   //Serial.println("OIC,Embedded SCPI Example,1,10");
+  return SCPI_SUCCESS;
+}
+
+ scpi_error_t trig_single(struct scpi_parser_context* context, struct scpi_token* command)
+{
+  scpi_free_tokens(command);
+  contTrigger = false;
+  return SCPI_SUCCESS;
+}
+ scpi_error_t trig_cont(struct scpi_parser_context* context, struct scpi_token* command)
+{
+  scpi_free_tokens(command);
+
+  contTrigger = true;
   return SCPI_SUCCESS;
 }
 
 scpi_error_t get_voltage(struct scpi_parser_context* context, struct scpi_token* command)
 {
   scpi_free_tokens(command);
- setup();
+  SerialUSB.print(" analog A0:");
+           
+            
+              float volt = analogRead(A0)*((47+5700)/47)*(3.3/1024);
+              SerialUSB.println(volt);
   //Serial.println("OIC,Embedded SCPI Example,1,10");
   return SCPI_SUCCESS;
 }
@@ -313,6 +350,21 @@ scpi_error_t get_err(struct scpi_parser_context* context, struct scpi_token* com
   //Serial.println("OIC,Embedded SCPI Example,1,10");
   return SCPI_SUCCESS;
 }
+
+scpi_error_t display_print(struct scpi_parser_context* context, struct scpi_token* command)
+{
+  contTrigger = false;
+SerialUSB.println("printing");
+u8g2.firstPage();
+  do {
+    u8g2.setFont(u8g2_font_ncenB10_tr);
+   u8g2.drawStr(10,18,"test");
+    
+  } while ( u8g2.nextPage() );
+scpi_free_tokens(command);
+  return SCPI_SUCCESS;
+}
+
 
 
 
