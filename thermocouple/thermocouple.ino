@@ -15,10 +15,14 @@
     #define CS4   12
     #endif
     #define CLK  8
+    
+#if (!defined(__SAMD21G18A__) && !defined(__SAMD21G16A__) && !defined(__SAMD21G16B__) && !defined(__SAMD21J18A__) && !defined(__SAMD21E17A__) && !defined(__SAMD21E18A__))
+#error "This program will only work on SAMD series boards like Empyrean and Zero"
+#endif
+    
     Adafruit_MAX31855 thermocouple1(CLK, CS1, DO);
     Adafruit_MAX31855 thermocouple2(CLK, CS2, DO);
 
-   // U8GLIB_SSD1306_128X32 u8g(U8G_I2C_OPT_NONE);  // I2C / TWI
     
 U8G2_SSD1306_128X32_UNIVISION_1_HW_I2C u8g2(U8G2_R0, /* reset=*/ U8X8_PIN_NONE, /* clock=*/ SCL, /* data=*/ SDA);   // pin remapping with ESP8266 HW I2C
 
