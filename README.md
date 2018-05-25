@@ -12,4 +12,5 @@ PCB:
 
 FW:
 * implement a way of selecting between the serial ports, and reply to the correct port
+	- use a boolean and accept that wlan and GPIB can't run at the same time?
 * automatic switching between the 2 sensor and 4 sensor mode
