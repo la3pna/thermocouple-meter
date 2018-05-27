@@ -17,13 +17,13 @@ FW:
 
 
 SCPI Commands:
-   *  *IDN?         -> identify
-   *  *RST          -> reset to local
+   *  *IDN?                  -> identify
+   *  *RST                   -> reset to local
    *  :TRIGger
-       *    :SINGle    -> trig_single
-       *    :CONTinous   -> trig_cont
+       *    :SINGle          -> trig_single
+       *    :CONTinous       -> trig_cont
    *  :MEASure
-       *    :TEMPerature?   -> get_alltemp
+       *    :TEMPerature?    -> get_alltemp
        *    :TEMPerature1?   -> get_temp1
        *    :TEMPerature2?   -> get_temp2
        *    :TEMPerature3?   -> get_temp3
@@ -33,9 +33,9 @@ SCPI Commands:
        *    :INTernal3?      -> get_int3
        *    :INTernal4?      -> get_int4
    *  :SYStem
-       *    :VOLTage?   -> get_voltage
-       *    :ERRor?     -> get_err
-       *    :PRINT      -> display_print
+       *    :VOLTage?        -> get_voltage
+       *    :ERRor?          -> get_err
+       *    :PRINT           -> display_print
    *  :UNIT
-       *    :TEMPerature -> set_temperature_unit (C/CEL/F/FAR/K/KEL) NOT IMPLEMENTED YET
-       *    :TEMPerature? -> get_temprature unit (C/CEL/F/FAR/K/KEL) NOT IMPLEMENTED YET
+       *    :TEMPerature     -> set_temperature_unit (C/CEL/F/FAR/K/KEL) NOT IMPLEMENTED YET
+       *    :TEMPerature?    -> get_temprature unit (C/CEL/F/FAR/K/KEL) NOT IMPLEMENTED YET
