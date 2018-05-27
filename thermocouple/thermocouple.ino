@@ -46,9 +46,10 @@ scpi_error_t set_voltage_2(struct scpi_parser_context* context, struct scpi_toke
   float temp3;
   float temp4;
  
-  boolean contTrigger = true;
+  boolean contTrigger = false;
   String idString = "LA3PNA,Thermocouple temperature meter,1,0.1A";
   String sendresponse = "";
+  String errorstring = "";
 
 void draw(float temp1, float temp2, float temp3, float temp4 ) {
   // graphic commands to redraw the complete screen should be placed here
@@ -188,6 +189,10 @@ void setup_scpi(){
    *    :TEMPerature2?   -> get_temp2
    *    :TEMPerature3?   -> get_temp3
    *    :TEMPerature4?   -> get_temp4
+   *    :INTernal1?      -> get_int1
+   *    :INTernal2?      -> get_int2
+   *    :INTernal3?      -> get_int3
+   *    :INTernal4?      -> get_int4
    *  :SYStem
    *    :VOLTage?   -> get_voltage
    *  :UNIT
@@ -213,12 +218,12 @@ void setup_scpi(){
   
   scpi_register_command(measure, SCPI_CL_CHILD, "INTernal1?", 10, "INT1?", 5, get_int1);
   scpi_register_command(measure, SCPI_CL_CHILD, "INTernal2?", 10, "INT2?", 5, get_int2);
-  scpi_register_command(measure, SCPI_CL_CHILD, "INTernal3?", 10, "INT3?", 5, get_int3);
-  scpi_register_command(measure, SCPI_CL_CHILD, "INTernal4?", 10, "INT4?", 5, get_int4);
   // NEED A DEFINE FOR 4 MEASUREMENTS, NEED TO IMPLEMENT THE SWITCHING IN SETUP
   #ifdef use4
   scpi_register_command(measure, SCPI_CL_CHILD, "TEMPerature3?", 13, "TEMP3?", 6, get_temp3);
   scpi_register_command(measure, SCPI_CL_CHILD, "TEMPerature4?", 13, "TEMP4?", 6, get_temp4);
+  scpi_register_command(measure, SCPI_CL_CHILD, "INTernal3?", 10, "INT3?", 5, get_int3);
+  scpi_register_command(measure, SCPI_CL_CHILD, "INTernal4?", 10, "INT4?", 5, get_int4);
    #endif
 //  scpi_register_command(unit, SCPI_CL_CHILD, "TEMPerature", 11, "TEMP", 4, get_voltage_3);
 //  scpi_register_command(unit, SCPI_CL_CHILD, "TEMPerature?", 12, "TEMP?", 5, get_voltage_3);
@@ -293,6 +298,7 @@ if(serialport = 1){
   }else if (serialport = 3){
     Serial.println(sendresponse);
     }else{
+      errorstring = errorstring + " Error: Unknown port reply";
       }
    serialport = 0; // 2 for wlan/gpib
    sendresponse = "";
@@ -316,6 +322,7 @@ if(serialport = 1){
   }else if (serialport = 3){
     Serial.println(sendresponse);
     }else{
+      errorstring = errorstring + " Error: Unknown port reply";
       }
    serialport = 0; // 2 for wlan/gpib
    sendresponse = "";
@@ -335,6 +342,7 @@ if(serialport = 1){
   }else if (serialport = 3){
     Serial.println(sendresponse);
     }else{
+      errorstring = errorstring + " Error: Unknown port reply";
       }
    serialport = 0; // 2 for wlan/gpib
    sendresponse = "";
@@ -355,6 +363,7 @@ if(serialport = 1){
   }else if (serialport = 3){
     Serial.println(sendresponse);
     }else{
+      errorstring = errorstring + " Error: Unknown port reply";
       }
    serialport = 0; // 2 for wlan/gpib
    sendresponse = "";
@@ -374,6 +383,7 @@ if(serialport = 1){
   }else if (serialport = 3){
     Serial.println(sendresponse);
     }else{
+      errorstring = errorstring + " Error: Unknown port reply";
       }
    serialport = 0; // 2 for wlan/gpib
    sendresponse = "";
@@ -393,6 +403,7 @@ if(serialport = 1){
   }else if (serialport = 3){
     Serial.println(sendresponse);
     }else{
+      errorstring = errorstring + " Error: Unknown port reply";
       }
    serialport = 0; // 2 for wlan/gpib
    sendresponse = "";
@@ -412,6 +423,7 @@ if(serialport = 1){
   }else if (serialport = 3){
     Serial.println(sendresponse);
     }else{
+      errorstring = errorstring + " Error: Unknown port reply";
       }
    serialport = 0; // 2 for wlan/gpib
    sendresponse = "";
@@ -431,6 +443,7 @@ if(serialport = 1){
   }else if (serialport = 3){
     Serial.println(sendresponse);
     }else{
+      errorstring = errorstring + " Error: Unknown port reply";
       }
    serialport = 0; // 2 for wlan/gpib
    sendresponse = "";
@@ -450,6 +463,7 @@ if(serialport = 1){
   }else if (serialport = 3){
     Serial.println(sendresponse);
     }else{
+      errorstring = errorstring + " Error: Unknown port reply";
       }
    serialport = 0; // 2 for wlan/gpib
    sendresponse = "";
@@ -469,6 +483,7 @@ if(serialport = 1){
   }else if (serialport = 3){
     Serial.println(sendresponse);
     }else{
+      errorstring = errorstring + " Error: Unknown port reply";
       }
    serialport = 0; // 2 for wlan/gpib
    sendresponse = "";
@@ -480,16 +495,27 @@ if(serialport = 1){
 
 scpi_error_t get_err(struct scpi_parser_context* context, struct scpi_token* command)
 {
+      sendresponse = String(errorstring);
+      errorstring = "";            
+if(serialport = 1){
+  SerialUSB.println(sendresponse);
+} else if (serialport = 2){
+  Serial1.println(sendresponse);
+  }else if (serialport = 3){
+    Serial.println(sendresponse);
+    }else{
+      }
+   serialport = 0; // 2 for wlan/gpib
+   sendresponse = "";
+  
   scpi_free_tokens(command);
- //setup();
-  SerialUSB.println("does this work?");
   return SCPI_SUCCESS;
 }
 
 scpi_error_t display_print(struct scpi_parser_context* context, struct scpi_token* command)
 {
   contTrigger = false;
-SerialUSB.println("printing");
+//SerialUSB.println("printing");
 u8g2.firstPage();
   do {
     u8g2.setFont(u8g2_font_ncenB10_tr);
