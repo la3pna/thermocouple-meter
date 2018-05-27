@@ -47,7 +47,8 @@ scpi_error_t set_voltage_2(struct scpi_parser_context* context, struct scpi_toke
   double temp4;
   #endif
   boolean contTrigger = true;
-
+  String idString = "OIC,Embedded SCPI Example,1,10";
+  String sendresponse = "";
 
 void draw(float temp1, float temp2, float temp3, float temp4 ) {
   // graphic commands to redraw the complete screen should be placed here
@@ -81,23 +82,34 @@ void draw(float temp1, float temp2, float temp3, float temp4 ) {
        SerialUSB.begin(9600);
        SerialUSB.println("MAX31855 test");
        // wait for MAX chip to stabilize
+       Serial1.begin(9600);
        u8g2.begin();
        delay(500);
     }
     
   char line_buffer[256];
   unsigned char read_length;
+  int serialport = 0; // 1 = USB, 2 = Serial1, 3 = Serial5;
     
     void loop() {
 
     // Here we need a routine that selects between the different serial ports, and does some housekeeping so things goes to the correct place
     //
-      
-
-      read_length = SerialUSB.readBytesUntil('\n', line_buffer, 256);
+      if (SerialUSB.available() > 0)   // see if incoming serial data:
+  { 
+    read_length = SerialUSB.readBytesUntil('\n', line_buffer, 256);
+    serialport = 1; // 1 for USB
+  }
+      if (Serial1.available() > 0)   // see if incoming serial data:
+  { 
+    read_length = Serial1.readBytesUntil('\n', line_buffer, 256);
+    serialport = 2; // 2 for wlan/gpib
+  }
+   //   read_length = SerialUSB.readBytesUntil('\n', line_buffer, 256);
     if(read_length > 0)
     {
       scpi_execute_command(&ctx, line_buffer, read_length);
+      read_length = NULL;
     }
       
        // Initialize variables.
@@ -265,13 +277,15 @@ void setup_scpi(){
    *  *IDN?         -> identify
    *  *RST          -> reset to local
    *  :TRIGger
-   *    :VOLTage    -> set_voltage
-   *    :VOLTage1   -> set_voltage_2
+   *    :SINGle    -> trig_single
+   *    :CONTinous   -> trig_cont
    *  :MEASure
-   *    :VOLTage?   -> get_voltage
-   *    :VOLTage1?  -> get_voltage_2
-   *    :VOLTage2?  -> get_voltage_3
-   *  :SYSTem
+   *    :TEMPerature?   -> get_alltemp
+   *    :TEMPerature1?   -> get_temp1
+   *    :TEMPerature2?   -> get_temp2
+   *    :TEMPerature3?   -> get_temp3
+   *    :TEMPerature4?   -> get_temp4
+   *  :SYStem
    *    :VOLTage?   -> get_voltage
    *  :UNIT
    *    :TEMPerature -> set_temperature_unit (C/CEL/F/FAR/K/KEL)
@@ -282,23 +296,26 @@ void setup_scpi(){
 
   trigger = scpi_register_command(ctx.command_tree, SCPI_CL_CHILD, "TRIGger", 7, "TRIG", 4, NULL);
   measure = scpi_register_command(ctx.command_tree, SCPI_CL_CHILD, "MEASure", 7, "MEAS", 4, NULL);
-  systems = scpi_register_command(ctx.command_tree, SCPI_CL_CHILD, "SYSTem", 6, "SYST", 4, NULL);
+  systems = scpi_register_command(ctx.command_tree, SCPI_CL_CHILD, "SYStem", 6, "SYS", 3, NULL);
   unit = scpi_register_command(ctx.command_tree, SCPI_CL_CHILD, "UNIT", 4, "UNIT", 4, NULL);
 
 
   scpi_register_command(trigger, SCPI_CL_CHILD, "SINGle", 6, "SING", 4, trig_single);
   scpi_register_command(trigger, SCPI_CL_CHILD, "CONTinous", 9, "CONT", 4, trig_cont);
 
-  scpi_register_command(measure, SCPI_CL_CHILD, "VOLTAGE?", 8, "VOLT?", 5, get_voltage);
-//  scpi_register_command(measure, SCPI_CL_CHILD, "VOLTAGE1?", 9, "VOLT1?", 6, get_voltage_2);
-//  scpi_register_command(measure, SCPI_CL_CHILD, "VOLTAGE2?", 9, "VOLT2?", 6, get_voltage_3);
+  scpi_register_command(measure, SCPI_CL_CHILD, "VOLTAGE?", 8, "VOLT?", 5, get_voltage); //this works?
+  scpi_register_command(measure, SCPI_CL_CHILD, "TEMPerature?", 12, "TEMP?", 5, get_temp);
+  scpi_register_command(measure, SCPI_CL_CHILD, "TEMPerature1?", 13, "TEMP1?", 6, get_temp1);
+  scpi_register_command(measure, SCPI_CL_CHILD, "TEMPerature2?", 13, "TEMP2?", 6, get_temp2);
+  scpi_register_command(measure, SCPI_CL_CHILD, "TEMPerature3?", 13, "TEMP3?", 6, get_temp3);
+  scpi_register_command(measure, SCPI_CL_CHILD, "TEMPerature4?", 13, "TEMP4?", 6, get_temp4);
    
 //  scpi_register_command(unit, SCPI_CL_CHILD, "TEMPerature", 11, "TEMP", 4, get_voltage_3);
 //  scpi_register_command(unit, SCPI_CL_CHILD, "TEMPerature?", 12, "TEMP?", 5, get_voltage_3);
 
   scpi_register_command(systems, SCPI_CL_CHILD, "ERRor?", 6, "ERR?", 4, get_err);
-  scpi_register_command(systems, SCPI_CL_CHILD, "VOLTage?", 8, "VOLT?", 4, get_voltage);
-  scpi_register_command(systems, SCPI_CL_CHILD, "PRINT", 5, "PRINT", 5, display_print);
+  scpi_register_command(systems, SCPI_CL_CHILD, "VOLTage?", 8, "VOLT?", 5, get_voltage); // this does not work?
+  scpi_register_command(systems, SCPI_CL_CHILD, "PRINT", 5, "PRINT", 5, display_print); 
 
 
   }
@@ -306,17 +323,35 @@ void setup_scpi(){
   scpi_error_t identify(struct scpi_parser_context* context, struct scpi_token* command)
 {
   scpi_free_tokens(command);
-
-  SerialUSB.println("OIC,Embedded SCPI Example,1,10");
+if(serialport = 1){
+  SerialUSB.println(idString);
+} else if (serialport = 2){
+  Serial1.println(idString);
+  }else if (serialport = 3){
+    Serial.println(idString);
+    }else{
+      }
+   serialport = 0; // 2 for wlan/gpib
   return SCPI_SUCCESS;
 }
 
 scpi_error_t reset(struct scpi_parser_context* context, struct scpi_token* command)
 {
+if(serialport = 1){
+  sendresponse = "Resetting ";
+  
+  SerialUSB.println(sendresponse);
+} else if (serialport = 2){
+  Serial1.println(sendresponse);
+  }else if (serialport = 3){
+    Serial.println(sendresponse);
+    }else{
+      }
+   serialport = 0; // 2 for wlan/gpib
+   sendresponse = "";
+   
   scpi_free_tokens(command);
-  SerialUSB.println("resetting");
    NVIC_SystemReset();
-  //Serial.println("OIC,Embedded SCPI Example,1,10");
   return SCPI_SUCCESS;
 }
 
@@ -337,28 +372,124 @@ scpi_error_t reset(struct scpi_parser_context* context, struct scpi_token* comma
 scpi_error_t get_voltage(struct scpi_parser_context* context, struct scpi_token* command)
 {
   scpi_free_tokens(command);
-  SerialUSB.print(" analog A0:");
-           
-            
-              float volt = analogRead(A0)*((47+5700)/47)*(3.3/1024);
-              SerialUSB.println(volt);
-  //Serial.println("OIC,Embedded SCPI Example,1,10");
+  SerialUSB.println("test to see if its a logic fault or this does not run");
+  
+  float volt = analogRead(A0)*((47+5700)/47)*(3.3/1024);
+  sendresponse = "Analog read: " + String(volt) + " V";            
+if(serialport = 1){
+  SerialUSB.println(sendresponse);
+} else if (serialport = 2){
+  Serial1.println(sendresponse);
+  }else if (serialport = 3){
+    Serial.println(sendresponse);
+    }else{
+      }
+   serialport = 0; // 2 for wlan/gpib
+   sendresponse = "";
+              
   return SCPI_SUCCESS;
 }
 
-scpi_error_t set_voltage(struct scpi_parser_context* context, struct scpi_token* command)
+scpi_error_t get_temp(struct scpi_parser_context* context, struct scpi_token* command)
 {
+
+    sendresponse = "A";            
+if(serialport = 1){
+  SerialUSB.println(sendresponse);
+} else if (serialport = 2){
+  Serial1.println(sendresponse);
+  }else if (serialport = 3){
+    Serial.println(sendresponse);
+    }else{
+      }
+   serialport = 0; // 2 for wlan/gpib
+   sendresponse = "";
+   
   scpi_free_tokens(command);
- setup();
-  //Serial.println("OIC,Embedded SCPI Example,1,10");
+  return SCPI_SUCCESS;
+}
+
+scpi_error_t get_temp1(struct scpi_parser_context* context, struct scpi_token* command)
+{
+
+    sendresponse = "A";            
+if(serialport = 1){
+  SerialUSB.println(sendresponse);
+} else if (serialport = 2){
+  Serial1.println(sendresponse);
+  }else if (serialport = 3){
+    Serial.println(sendresponse);
+    }else{
+      }
+   serialport = 0; // 2 for wlan/gpib
+   sendresponse = "";
+   
+  scpi_free_tokens(command);
+  return SCPI_SUCCESS;
+}
+
+scpi_error_t get_temp2(struct scpi_parser_context* context, struct scpi_token* command)
+{
+
+    sendresponse = "B";            
+if(serialport = 1){
+  SerialUSB.println(sendresponse);
+} else if (serialport = 2){
+  Serial1.println(sendresponse);
+  }else if (serialport = 3){
+    Serial.println(sendresponse);
+    }else{
+      }
+   serialport = 0; // 2 for wlan/gpib
+   sendresponse = "";
+   
+  scpi_free_tokens(command);
+  return SCPI_SUCCESS;
+}
+
+scpi_error_t get_temp3(struct scpi_parser_context* context, struct scpi_token* command)
+{
+
+    sendresponse = "C";            
+if(serialport = 1){
+  SerialUSB.println(sendresponse);
+} else if (serialport = 2){
+  Serial1.println(sendresponse);
+  }else if (serialport = 3){
+    Serial.println(sendresponse);
+    }else{
+      }
+   serialport = 0; // 2 for wlan/gpib
+   sendresponse = "";
+   
+  scpi_free_tokens(command);
+  return SCPI_SUCCESS;
+}
+
+scpi_error_t get_temp4(struct scpi_parser_context* context, struct scpi_token* command)
+{
+
+    sendresponse = "D";            
+if(serialport = 1){
+  SerialUSB.println(sendresponse);
+} else if (serialport = 2){
+  Serial1.println(sendresponse);
+  }else if (serialport = 3){
+    Serial.println(sendresponse);
+    }else{
+      }
+   serialport = 0; // 2 for wlan/gpib
+   sendresponse = "";
+   
+  scpi_free_tokens(command);
   return SCPI_SUCCESS;
 }
 
 scpi_error_t get_err(struct scpi_parser_context* context, struct scpi_token* command)
 {
   scpi_free_tokens(command);
- setup();
-  //Serial.println("OIC,Embedded SCPI Example,1,10");
+ //setup();
+  SerialUSB.println("does this work?");
   return SCPI_SUCCESS;
 }
 
