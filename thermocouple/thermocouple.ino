@@ -13,10 +13,8 @@
     #define DO   7
     #define CS1   9
     #define CS2   10
-    #ifdef use4
     #define CS3   11
     #define CS4   12
-    #endif
     #define CLK  8
     
 #if (!defined(__SAMD21G18A__) && !defined(__SAMD21G16A__) && !defined(__SAMD21G16B__) && !defined(__SAMD21J18A__) && !defined(__SAMD21E17A__) && !defined(__SAMD21E18A__))
@@ -25,6 +23,9 @@
     
     Adafruit_MAX31855 thermocouple1(CLK, CS1, DO);
     Adafruit_MAX31855 thermocouple2(CLK, CS2, DO);
+    Adafruit_MAX31855 thermocouple3(CLK, CS3, DO);
+    Adafruit_MAX31855 thermocouple4(CLK, CS4, DO);
+    
 
     
 U8G2_SSD1306_128X32_UNIVISION_1_HW_I2C u8g2(U8G2_R0, /* reset=*/ U8X8_PIN_NONE, /* clock=*/ SCL, /* data=*/ SDA);   // pin remapping with ESP8266 HW I2C
@@ -42,10 +43,9 @@ scpi_error_t set_voltage_2(struct scpi_parser_context* context, struct scpi_toke
 
   double temp1;
   double temp2;
-  #ifdef use4
   double temp3;
   double temp4;
-  #endif
+ 
   boolean contTrigger = true;
   String idString = "OIC,Embedded SCPI Example,1,10";
   String sendresponse = "";
@@ -157,7 +157,6 @@ void draw(float temp1, float temp2, float temp3, float temp4 ) {
  draw( rawTemp1, rawTemp2, internalTemp1, internalTemp2);
  #else
  draw( rawTemp1, rawTemp2, NAN, NAN);
- //draw( 1200.90f, -1200.023f, NAN, NAN); // used to test display formatting
  #endif
   }
        delay(1000);
@@ -307,9 +306,11 @@ void setup_scpi(){
   scpi_register_command(measure, SCPI_CL_CHILD, "TEMPerature?", 12, "TEMP?", 5, get_temp);
   scpi_register_command(measure, SCPI_CL_CHILD, "TEMPerature1?", 13, "TEMP1?", 6, get_temp1);
   scpi_register_command(measure, SCPI_CL_CHILD, "TEMPerature2?", 13, "TEMP2?", 6, get_temp2);
+  // NEED A DEFINE FOR 4 MEASUREMENTS, NEED TO IMPLEMENT THE SWITCHING IN SETUP
+  #ifdef use4
   scpi_register_command(measure, SCPI_CL_CHILD, "TEMPerature3?", 13, "TEMP3?", 6, get_temp3);
   scpi_register_command(measure, SCPI_CL_CHILD, "TEMPerature4?", 13, "TEMP4?", 6, get_temp4);
-   
+   #endif
 //  scpi_register_command(unit, SCPI_CL_CHILD, "TEMPerature", 11, "TEMP", 4, get_voltage_3);
 //  scpi_register_command(unit, SCPI_CL_CHILD, "TEMPerature?", 12, "TEMP?", 5, get_voltage_3);
 
@@ -411,8 +412,8 @@ if(serialport = 1){
 
 scpi_error_t get_temp1(struct scpi_parser_context* context, struct scpi_token* command)
 {
-
-    sendresponse = "A";            
+   // Read the temperature of the thermocouple. This temp is compensated for cold junction temperature.
+    sendresponse = String(thermocouple1.readCelsius());            
 if(serialport = 1){
   SerialUSB.println(sendresponse);
 } else if (serialport = 2){
@@ -430,8 +431,9 @@ if(serialport = 1){
 
 scpi_error_t get_temp2(struct scpi_parser_context* context, struct scpi_token* command)
 {
+    sendresponse = String(thermocouple2.readCelsius());            
 
-    sendresponse = "B";            
+          
 if(serialport = 1){
   SerialUSB.println(sendresponse);
 } else if (serialport = 2){
@@ -450,7 +452,7 @@ if(serialport = 1){
 scpi_error_t get_temp3(struct scpi_parser_context* context, struct scpi_token* command)
 {
 
-    sendresponse = "C";            
+    sendresponse = String(thermocouple3.readCelsius());            
 if(serialport = 1){
   SerialUSB.println(sendresponse);
 } else if (serialport = 2){
@@ -469,7 +471,7 @@ if(serialport = 1){
 scpi_error_t get_temp4(struct scpi_parser_context* context, struct scpi_token* command)
 {
 
-    sendresponse = "D";            
+    sendresponse = String(thermocouple4.readCelsius());            
 if(serialport = 1){
   SerialUSB.println(sendresponse);
 } else if (serialport = 2){
@@ -484,6 +486,8 @@ if(serialport = 1){
   scpi_free_tokens(command);
   return SCPI_SUCCESS;
 }
+
+
 
 scpi_error_t get_err(struct scpi_parser_context* context, struct scpi_token* command)
 {
