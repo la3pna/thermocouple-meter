@@ -5,7 +5,10 @@
   #include <scpiparser.h>
  #include "Adafruit_MAX31855.h"
 
+  //
   //  #define use4 // Undefine for only 2 thermocouple amplifiers
+  //  Should make a method using D2 to switch between 2 and 4 probe versions. 
+  //
  
     #define DO   7
     #define CS1   9
@@ -17,7 +20,7 @@
     #define CLK  8
     
 #if (!defined(__SAMD21G18A__) && !defined(__SAMD21G16A__) && !defined(__SAMD21G16B__) && !defined(__SAMD21J18A__) && !defined(__SAMD21E17A__) && !defined(__SAMD21E18A__))
-#error "This program will only work on SAMD series boards like Empyrean and Zero"
+ #error "This program will only work on SAMD series boards like Empyrean and Zero"
 #endif
     
     Adafruit_MAX31855 thermocouple1(CLK, CS1, DO);
@@ -82,10 +85,14 @@ void draw(float temp1, float temp2, float temp3, float temp4 ) {
        delay(500);
     }
     
- char line_buffer[256];
+  char line_buffer[256];
   unsigned char read_length;
     
     void loop() {
+
+    // Here we need a routine that selects between the different serial ports, and does some housekeeping so things goes to the correct place
+    //
+      
 
       read_length = SerialUSB.readBytesUntil('\n', line_buffer, 256);
     if(read_length > 0)
