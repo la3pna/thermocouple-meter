@@ -171,6 +171,8 @@
 <wire x1="0" y1="100" x2="0" y2="0" width="0" layer="20"/>
 <rectangle x1="0" y1="0" x2="2.54" y2="100.33" layer="25"/>
 <rectangle x1="67.31" y1="0" x2="69.85" y2="99.06" layer="25"/>
+<dimension x1="53.34" y1="92.71" x2="8.89" y2="92.71" x3="31.115" y3="107.315" textsize="1.778" layer="21"/>
+<dimension x1="8.89" y1="92.71" x2="31.75" y2="92.71" x3="20.32" y3="90.805" textsize="1.778" layer="21"/>
 </plain>
 <libraries>
 <library name="mine">

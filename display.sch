@@ -3829,6 +3829,12 @@ In this library the device names are the same as the pin names of the symbols, t
 <part name="GND3" library="supply1" deviceset="GND" device=""/>
 <part name="D2" library="special" deviceset="DUOLED" device=""/>
 <part name="D3" library="special" deviceset="DUOLED" device=""/>
+<part name="R3" library="rcl" deviceset="R-EU_" device="R0603" value="220R"/>
+<part name="R4" library="rcl" deviceset="R-EU_" device="R0603" value="220R"/>
+<part name="R5" library="rcl" deviceset="R-EU_" device="R0603" value="220R"/>
+<part name="R6" library="rcl" deviceset="R-EU_" device="R0603" value="220R"/>
+<part name="GND5" library="supply1" deviceset="GND" device=""/>
+<part name="GND6" library="supply1" deviceset="GND" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -3855,19 +3861,25 @@ In this library the device names are the same as the pin names of the symbols, t
 <instance part="GND4" gate="1" x="78.74" y="60.96"/>
 <instance part="X3" gate="-1" x="43.18" y="78.74" rot="R180"/>
 <instance part="X3" gate="-2" x="45.72" y="71.12" rot="R90"/>
-<instance part="X3" gate="-5" x="66.04" y="48.26"/>
-<instance part="X3" gate="-6" x="66.04" y="45.72"/>
-<instance part="X3" gate="-9" x="86.36" y="45.72"/>
-<instance part="X3" gate="-10" x="96.52" y="50.8"/>
+<instance part="X3" gate="-5" x="99.06" y="88.9" rot="R90"/>
+<instance part="X3" gate="-6" x="144.78" y="88.9" rot="R90"/>
+<instance part="X3" gate="-9" x="101.6" y="58.42" rot="R90"/>
+<instance part="X3" gate="-10" x="142.24" y="58.42" rot="R90"/>
 <instance part="R7" gate="G$1" x="73.66" y="71.12" rot="R90"/>
 <instance part="R8" gate="G$1" x="78.74" y="71.12" rot="R90"/>
 <instance part="X3" gate="-3" x="88.9" y="68.58" rot="R270"/>
 <instance part="X3" gate="-4" x="83.82" y="68.58" rot="R270"/>
-<instance part="X3" gate="-7" x="83.82" y="50.8"/>
-<instance part="X3" gate="-8" x="76.2" y="43.18"/>
+<instance part="X3" gate="-7" x="101.6" y="71.12" rot="R90"/>
+<instance part="X3" gate="-8" x="142.24" y="71.12" rot="R90"/>
 <instance part="GND3" gate="1" x="121.92" y="78.74"/>
 <instance part="D2" gate="G$1" x="121.92" y="68.58"/>
 <instance part="D3" gate="G$1" x="121.92" y="55.88"/>
+<instance part="R3" gate="G$1" x="106.68" y="68.58"/>
+<instance part="R4" gate="G$1" x="137.16" y="68.58"/>
+<instance part="R5" gate="G$1" x="137.16" y="55.88"/>
+<instance part="R6" gate="G$1" x="106.68" y="55.88"/>
+<instance part="GND5" gate="1" x="121.92" y="60.96"/>
+<instance part="GND6" gate="1" x="121.92" y="48.26"/>
 </instances>
 <busses>
 </busses>
@@ -3910,6 +3922,14 @@ In this library the device names are the same as the pin names of the symbols, t
 <pinref part="D1" gate="G$1" pin="K"/>
 <pinref part="GND3" gate="1" pin="GND"/>
 </segment>
+<segment>
+<pinref part="D2" gate="G$1" pin="K"/>
+<pinref part="GND5" gate="1" pin="GND"/>
+</segment>
+<segment>
+<pinref part="D3" gate="G$1" pin="K"/>
+<pinref part="GND6" gate="1" pin="GND"/>
+</segment>
 </net>
 <net name="N$15" class="0">
 <segment>
@@ -3935,6 +3955,66 @@ In this library the device names are the same as the pin names of the symbols, t
 <pinref part="X3" gate="-3" pin="1"/>
 <pinref part="X2" gate="-4" pin="1"/>
 <wire x1="88.9" y1="71.12" x2="88.9" y2="76.2" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$5" class="0">
+<segment>
+<pinref part="R1" gate="G$1" pin="1"/>
+<pinref part="X3" gate="-5" pin="1"/>
+</segment>
+</net>
+<net name="N$6" class="0">
+<segment>
+<pinref part="R2" gate="G$1" pin="2"/>
+<pinref part="X3" gate="-6" pin="1"/>
+</segment>
+</net>
+<net name="N$7" class="0">
+<segment>
+<pinref part="D2" gate="G$1" pin="A1"/>
+<pinref part="R3" gate="G$1" pin="2"/>
+</segment>
+</net>
+<net name="N$8" class="0">
+<segment>
+<pinref part="D2" gate="G$1" pin="A2"/>
+<pinref part="R4" gate="G$1" pin="1"/>
+</segment>
+</net>
+<net name="N$9" class="0">
+<segment>
+<pinref part="D3" gate="G$1" pin="A2"/>
+<pinref part="R5" gate="G$1" pin="1"/>
+</segment>
+</net>
+<net name="N$10" class="0">
+<segment>
+<pinref part="D3" gate="G$1" pin="A1"/>
+<pinref part="R6" gate="G$1" pin="2"/>
+</segment>
+</net>
+<net name="N$11" class="0">
+<segment>
+<pinref part="R3" gate="G$1" pin="1"/>
+<pinref part="X3" gate="-7" pin="1"/>
+</segment>
+</net>
+<net name="N$12" class="0">
+<segment>
+<pinref part="R4" gate="G$1" pin="2"/>
+<pinref part="X3" gate="-8" pin="1"/>
+</segment>
+</net>
+<net name="N$13" class="0">
+<segment>
+<pinref part="R6" gate="G$1" pin="1"/>
+<pinref part="X3" gate="-9" pin="1"/>
+</segment>
+</net>
+<net name="N$14" class="0">
+<segment>
+<pinref part="R5" gate="G$1" pin="2"/>
+<pinref part="X3" gate="-10" pin="1"/>
 </segment>
 </net>
 </nets>
