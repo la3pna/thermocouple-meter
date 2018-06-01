@@ -548,12 +548,33 @@ scpi_error_t display_print(struct scpi_parser_context* context, struct scpi_toke
   struct scpi_token* args;
   args = command;
  char* val = args->value;
- int l;
-SerialUSB.println(val);
+ int l = strlen(val);
+ int start = 0;
+char mychar[20];
+
+for(int m=0;m<20;m++){
+  mychar[m]=NULL;
+  }
+
+ for (int i = 0; i < l; i++){
+  if(val[i] == ' ')
+    { start = i;
+    break;
+      }
+  }
+  SerialUSB.println(val);
+   SerialUSB.println(mychar);
+   if((start > 0)&& (l > start)){
+    for(int j = start+1; j < l; j++){
+     mychar[j-start-1]=val[j];
+      }
+   }
+   SerialUSB.println(mychar);
 u8g2.firstPage();
   do {
+    
     u8g2.setFont(u8g2_font_ncenB10_tr);
-   u8g2.drawStr(10,18,"bleh");
+   u8g2.drawStr(10,18,mychar);
     
   } while ( u8g2.nextPage() );
 scpi_free_tokens(command);
