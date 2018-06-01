@@ -545,11 +545,15 @@ if(serialport = 1){
 scpi_error_t display_print(struct scpi_parser_context* context, struct scpi_token* command)
 {
   contTrigger = false;
-//SerialUSB.println("printing");
+  struct scpi_token* args;
+  args = command;
+ char* val = args->value;
+ int l;
+SerialUSB.println(val);
 u8g2.firstPage();
   do {
     u8g2.setFont(u8g2_font_ncenB10_tr);
-   u8g2.drawStr(10,18,"test");
+   u8g2.drawStr(10,18,"bleh");
     
   } while ( u8g2.nextPage() );
 scpi_free_tokens(command);
