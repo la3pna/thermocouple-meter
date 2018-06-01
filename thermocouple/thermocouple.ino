@@ -46,12 +46,13 @@ scpi_error_t set_voltage_2(struct scpi_parser_context* context, struct scpi_toke
   float temp3;
   float temp4;
  
-  boolean contTrigger = false;
+  boolean contTrigger = true;
   String idString = "LA3PNA,Thermocouple temperature meter,1,0.1A";
   String sendresponse = "";
   String errorstring = "";
   boolean use2 = false;
   int selectpin = 2;
+  boolean _verbose = false;
 
 void draw(float temp1, float temp2, float temp3, float temp4 ) {
   // graphic commands to redraw the complete screen should be placed here
@@ -129,7 +130,7 @@ void draw(float temp1, float temp2, float temp3, float temp4 ) {
        double rawTemp1 = thermocouple1.readCelsius(); // Read the temperature of the thermocouple. This temp is compensated for cold junction temperature.
        
   double  correctedTemp = rawTemp1; // calc_temp(internalTemp1, rawTemp1);
- if(contTrigger){  
+ if(_verbose){  
   SerialUSB.print("Corrected Temp1 = ");
           SerialUSB.print(correctedTemp, 5);
           SerialUSB.print(" internal temp: ");
@@ -144,7 +145,7 @@ void draw(float temp1, float temp2, float temp3, float temp4 ) {
       double  rawTemp2 = thermocouple2.readCelsius(); // Read the temperature of the thermocouple. This temp is compensated for cold junction temperature.
        
    correctedTemp = internalTemp2;// calc_temp(internalTemp, rawTemp);
- if(contTrigger){  
+ if(_verbose){  
   SerialUSB.print("Corrected Temp2 = ");
           SerialUSB.print(correctedTemp, 5);
           SerialUSB.print(" internal temp: ");
@@ -283,6 +284,7 @@ if(serialport = 1){
 
   // needs to do a single trigger here
   scpi_free_tokens(command);
+  _verbose = false;
   contTrigger = false;
   return SCPI_SUCCESS;
 }
@@ -291,6 +293,7 @@ if(serialport = 1){
   scpi_free_tokens(command);
 
   contTrigger = true;
+  _verbose = true;
   return SCPI_SUCCESS;
 }
 
