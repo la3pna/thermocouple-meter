@@ -50,6 +50,8 @@ scpi_error_t set_voltage_2(struct scpi_parser_context* context, struct scpi_toke
   String idString = "LA3PNA,Thermocouple temperature meter,1,0.1A";
   String sendresponse = "";
   String errorstring = "";
+  boolean use2 = false;
+  int selectpin = 2;
 
 void draw(float temp1, float temp2, float temp3, float temp4 ) {
   // graphic commands to redraw the complete screen should be placed here
@@ -60,25 +62,33 @@ void draw(float temp1, float temp2, float temp3, float temp4 ) {
     // u8g2.setFont(u8g2_font_courB18);
 //   u8g2.setFont(u8g2_font_osb21);
     char buf[12] ="";
-    #ifdef use4
-    u8g2.drawStr(0,14,dtostrf(temp1, 5, 2, buf));
-    u8g2.drawStr(70,14,dtostrf(temp2, 5, 2, buf));
-    u8g2.drawStr(0,31,dtostrf(temp3, 5, 2, buf));
-    u8g2.drawStr(70,31,dtostrf(temp4, 5, 2, buf));
-    #else
-    
-    u8g2.drawStr(0,25,dtostrf(temp1, 4, 2, buf));
+    if(use2){
+     u8g2.drawStr(0,25,dtostrf(temp1, 4, 2, buf));
     u8g2.drawStr(70,25,dtostrf(temp2, 4, 2, buf));
     u8g2.setFont(u8g2_font_ncenB08_tr);
     u8g2.drawStr(0,8,"1:");
     u8g2.drawStr(70,8,"2:");
-    #endif
+    } else{
+     u8g2.drawStr(0,14,dtostrf(temp1, 5, 2, buf));
+    u8g2.drawStr(70,14,dtostrf(temp2, 5, 2, buf));
+    u8g2.drawStr(0,31,dtostrf(temp3, 5, 2, buf));
+    u8g2.drawStr(70,31,dtostrf(temp4, 5, 2, buf));
+    }
   } while ( u8g2.nextPage() );
 }
 
 
  
     void setup() {
+
+      pinMode(selectpin,INPUT);
+      digitalWrite(selectpin,HIGH); // put on the pullups
+      delay(10);
+      if(digitalRead(selectpin))
+      {
+        use2 = true; // select between 2 and 4 sensors
+        }
+      
       setup_scpi();
        SerialUSB.begin(9600);
        SerialUSB.println("MAX31855 test");
@@ -154,11 +164,11 @@ void draw(float temp1, float temp2, float temp3, float temp4 ) {
     }
 
   if(contTrigger){            
- #ifdef use4         
+if(use2){        
  draw( rawTemp1, rawTemp2, internalTemp1, internalTemp2);
- #else
+} else{
  draw( rawTemp1, rawTemp2, NAN, NAN);
- #endif
+}
   }
      //  delay(1000);
  
@@ -219,12 +229,12 @@ void setup_scpi(){
   scpi_register_command(measure, SCPI_CL_CHILD, "INTernal1?", 10, "INT1?", 5, get_int1);
   scpi_register_command(measure, SCPI_CL_CHILD, "INTernal2?", 10, "INT2?", 5, get_int2);
   // NEED A DEFINE FOR 4 MEASUREMENTS, NEED TO IMPLEMENT THE SWITCHING IN SETUP
-  #ifdef use4
+
   scpi_register_command(measure, SCPI_CL_CHILD, "TEMPerature3?", 13, "TEMP3?", 6, get_temp3);
   scpi_register_command(measure, SCPI_CL_CHILD, "TEMPerature4?", 13, "TEMP4?", 6, get_temp4);
   scpi_register_command(measure, SCPI_CL_CHILD, "INTernal3?", 10, "INT3?", 5, get_int3);
   scpi_register_command(measure, SCPI_CL_CHILD, "INTernal4?", 10, "INT4?", 5, get_int4);
-   #endif
+
 //  scpi_register_command(unit, SCPI_CL_CHILD, "TEMPerature", 11, "TEMP", 4, get_voltage_3);
 //  scpi_register_command(unit, SCPI_CL_CHILD, "TEMPerature?", 12, "TEMP?", 5, get_voltage_3);
 
@@ -309,11 +319,16 @@ if(serialport = 1){
 scpi_error_t get_temp(struct scpi_parser_context* context, struct scpi_token* command)
 {
 
-#ifdef use4
-sendresponse = String(thermocouple1.readCelsius())+"; "+String(thermocouple2.readCelsius())+"; "+String(thermocouple3.readCelsius())+"; "+String(thermocouple4.readCelsius())+";"; 
-#else
-sendresponse = String(thermocouple1.readCelsius())+ "; " + String(thermocouple2.readCelsius())+";"; 
-#endif
+if(use2)
+{
+  sendresponse = String(thermocouple1.readCelsius())+ "; " + String(thermocouple2.readCelsius())+";"; 
+
+  } else 
+  { sendresponse = String(thermocouple1.readCelsius())+"; "+String(thermocouple2.readCelsius())+"; "+String(thermocouple3.readCelsius())+"; "+String(thermocouple4.readCelsius())+";"; 
+
+    }
+  
+  
         
 if(serialport = 1){
   SerialUSB.println(sendresponse);
@@ -354,7 +369,7 @@ if(serialport = 1){
 scpi_error_t get_temp2(struct scpi_parser_context* context, struct scpi_token* command)
 {
     sendresponse = String(thermocouple2.readCelsius());            
-
+ 
           
 if(serialport = 1){
   SerialUSB.println(sendresponse);
@@ -374,8 +389,10 @@ if(serialport = 1){
 
 scpi_error_t get_temp3(struct scpi_parser_context* context, struct scpi_token* command)
 {
-
-    sendresponse = String(thermocouple3.readCelsius());            
+ if(use2){sendresponse = "No 4 sensor board attached!";}
+ else{
+    sendresponse = String(thermocouple3.readCelsius());  
+ }          
 if(serialport = 1){
   SerialUSB.println(sendresponse);
 } else if (serialport = 2){
@@ -394,8 +411,10 @@ if(serialport = 1){
 
 scpi_error_t get_temp4(struct scpi_parser_context* context, struct scpi_token* command)
 {
-
-    sendresponse = String(thermocouple4.readCelsius());            
+ if(use2){sendresponse = "No 4 sensor board attached!";}
+ else{
+    sendresponse = String(thermocouple4.readCelsius());         
+ }   
 if(serialport = 1){
   SerialUSB.println(sendresponse);
 } else if (serialport = 2){
@@ -455,7 +474,12 @@ if(serialport = 1){
 scpi_error_t get_int3(struct scpi_parser_context* context, struct scpi_token* command)
 {
    // Read the temperature of the thermocouple. This temp is compensated for cold junction temperature.
-    sendresponse = String(thermocouple3.readInternal());            
+ if(use2){sendresponse = "No 4 sensor board attached!";}
+ 
+ else{
+    sendresponse = String(thermocouple3.readInternal());  
+ }
+         
 if(serialport = 1){
   SerialUSB.println(sendresponse);
 } else if (serialport = 2){
@@ -475,7 +499,10 @@ if(serialport = 1){
 scpi_error_t get_int4(struct scpi_parser_context* context, struct scpi_token* command)
 {
    // Read the temperature of the thermocouple. This temp is compensated for cold junction temperature.
+    if(use2){sendresponse = "No 4 sensor board attached!";}
+ else{
     sendresponse = String(thermocouple4.readInternal());            
+ }
 if(serialport = 1){
   SerialUSB.println(sendresponse);
 } else if (serialport = 2){
