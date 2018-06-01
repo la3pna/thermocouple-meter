@@ -230,12 +230,12 @@ void setup_scpi(){
   scpi_register_command(measure, SCPI_CL_CHILD, "INTernal1?", 10, "INT1?", 5, get_int1);
   scpi_register_command(measure, SCPI_CL_CHILD, "INTernal2?", 10, "INT2?", 5, get_int2);
   // NEED A DEFINE FOR 4 MEASUREMENTS, NEED TO IMPLEMENT THE SWITCHING IN SETUP
-
+if(!use2){
   scpi_register_command(measure, SCPI_CL_CHILD, "TEMPerature3?", 13, "TEMP3?", 6, get_temp3);
   scpi_register_command(measure, SCPI_CL_CHILD, "TEMPerature4?", 13, "TEMP4?", 6, get_temp4);
   scpi_register_command(measure, SCPI_CL_CHILD, "INTernal3?", 10, "INT3?", 5, get_int3);
   scpi_register_command(measure, SCPI_CL_CHILD, "INTernal4?", 10, "INT4?", 5, get_int4);
-
+}
 //  scpi_register_command(unit, SCPI_CL_CHILD, "TEMPerature", 11, "TEMP", 4, get_voltage_3);
 //  scpi_register_command(unit, SCPI_CL_CHILD, "TEMPerature?", 12, "TEMP?", 5, get_voltage_3);
 
