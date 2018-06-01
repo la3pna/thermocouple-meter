@@ -39,5 +39,5 @@ SCPI Commands:
        
  Libraries needed: 
    - U8g2lib (Available in arduino library manager)
-   - Open Instrument control [scpiparser] ( https://github.com/LachlanGunn/oic )
+   - Open Instrument control [scpiparser] ( https://github.com/la3pna/oic )
    - Adafruit MAX31855 (available in arduino library manager) (intend to rewrite this to use some SAMD features in getting the data) 
