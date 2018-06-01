@@ -33,9 +33,9 @@ SCPI Commands:
        *    :VOLTage?        -> get supply voltage
        *    :ERRor?          -> get/clears error from error handling
        *    :PRINT           -> display print string
-   *  :UNIT (getting these to work will require rewriting the adafruit library from scratch)
-       *    :TEMPerature     -> set_temperature_unit (C/CEL/F/FAR/K/KEL) NOT IMPLEMENTED YET 
-       *    :TEMPerature?    -> get_temprature unit (C/CEL/F/FAR/K/KEL) NOT IMPLEMENTED YET
+   *  :UNIT *(getting these to work will require rewriting the adafruit library from scratch)*
+       *    :TEMPerature     -> set_temperature_unit (C/CEL/F/FAR/K/KEL) *NOT IMPLEMENTED YET* 
+       *    :TEMPerature?    -> get_temprature unit (C/CEL/F/FAR/K/KEL) *NOT IMPLEMENTED YET*
        
  Libraries needed: 
    - U8g2lib (Available in arduino library manager)
