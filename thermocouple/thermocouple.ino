@@ -112,7 +112,7 @@ void draw(float temp1, float temp2, float temp3, float temp4 ) {
        SerialUSB.begin(9600);
        SerialUSB.println("MAX31855 test");
        // wait for MAX chip to stabilize
-       Serial1.begin(9600);
+       Serial1.begin(115200);
        u8g2.begin();
        delay(500);
     }
@@ -129,15 +129,18 @@ void draw(float temp1, float temp2, float temp3, float temp4 ) {
   { 
     read_length = SerialUSB.readBytesUntil('\n', line_buffer, 256);
     serialport = 1; // 1 for USB
+ 
   }
       if (Serial1.available() > 0)   // see if incoming serial data:
   { 
     read_length = Serial1.readBytesUntil('\n', line_buffer, 256);
     serialport = 2; // 2 for wlan/gpib
+
   }
 
     if(read_length > 0)
     {
+       
       scpi_execute_command(&ctx, line_buffer, read_length);
       read_length = NULL;
     }
@@ -265,11 +268,11 @@ if(!use2){
   scpi_error_t identify(struct scpi_parser_context* context, struct scpi_token* command)
 {
   scpi_free_tokens(command);
-if(serialport = 1){
+if(serialport == 1){
   SerialUSB.println(idString);
-} else if (serialport = 2){
+} else if (serialport == 2){
   Serial1.println(idString);
-  }else if (serialport = 3){
+  }else if (serialport == 3){
     Serial.println(idString);
     }else{
       }
@@ -279,13 +282,13 @@ if(serialport = 1){
 
 scpi_error_t reset(struct scpi_parser_context* context, struct scpi_token* command)
 {
-if(serialport = 1){
+if(serialport == 1){
   sendresponse = "Resetting ";
   
   SerialUSB.println(sendresponse);
-} else if (serialport = 2){
+} else if (serialport == 2){
   Serial1.println(sendresponse);
-  }else if (serialport = 3){
+  }else if (serialport == 3){
     Serial.println(sendresponse);
     }else{
       }
@@ -322,11 +325,11 @@ scpi_error_t get_voltage(struct scpi_parser_context* context, struct scpi_token*
   
   float volt = analogRead(A0)*((47+5700)/47)*(3.3/1024);
   sendresponse = "Analog read: " + String(volt) + " V";            
-if(serialport = 1){
+if(serialport == 1){
   SerialUSB.println(sendresponse);
-} else if (serialport = 2){
+} else if (serialport == 2){
   Serial1.println(sendresponse);
-  }else if (serialport = 3){
+  }else if (serialport == 3){
     Serial.println(sendresponse);
     }else{
       errorstring = errorstring + " Error: Unknown port reply";
@@ -351,11 +354,11 @@ if(use2)
   
   
         
-if(serialport = 1){
+if(serialport == 1){
   SerialUSB.println(sendresponse);
-} else if (serialport = 2){
+} else if (serialport == 2){
   Serial1.println(sendresponse);
-  }else if (serialport = 3){
+  }else if (serialport == 3){
     Serial.println(sendresponse);
     }else{
       errorstring = errorstring + " Error: Unknown port reply";
@@ -371,11 +374,11 @@ scpi_error_t get_temp1(struct scpi_parser_context* context, struct scpi_token* c
 {
    // Read the temperature of the thermocouple. This temp is compensated for cold junction temperature.
     sendresponse = String(thermocouple1.readCelsius());            
-if(serialport = 1){
+if(serialport == 1){
   SerialUSB.println(sendresponse);
-} else if (serialport = 2){
+} else if (serialport == 2){
   Serial1.println(sendresponse);
-  }else if (serialport = 3){
+  }else if (serialport == 3){
     Serial.println(sendresponse);
     }else{
       errorstring = errorstring + " Error: Unknown port reply";
@@ -392,11 +395,11 @@ scpi_error_t get_temp2(struct scpi_parser_context* context, struct scpi_token* c
     sendresponse = String(thermocouple2.readCelsius());            
  
           
-if(serialport = 1){
+if(serialport == 1){
   SerialUSB.println(sendresponse);
-} else if (serialport = 2){
+} else if (serialport == 2){
   Serial1.println(sendresponse);
-  }else if (serialport = 3){
+  }else if (serialport == 3){
     Serial.println(sendresponse);
     }else{
       errorstring = errorstring + " Error: Unknown port reply";
@@ -414,11 +417,11 @@ scpi_error_t get_temp3(struct scpi_parser_context* context, struct scpi_token* c
  else{
     sendresponse = String(thermocouple3.readCelsius());  
  }          
-if(serialport = 1){
+if(serialport == 1){
   SerialUSB.println(sendresponse);
-} else if (serialport = 2){
+} else if (serialport == 2){
   Serial1.println(sendresponse);
-  }else if (serialport = 3){
+  }else if (serialport == 3){
     Serial.println(sendresponse);
     }else{
       errorstring = errorstring + " Error: Unknown port reply";
@@ -436,11 +439,11 @@ scpi_error_t get_temp4(struct scpi_parser_context* context, struct scpi_token* c
  else{
     sendresponse = String(thermocouple4.readCelsius());         
  }   
-if(serialport = 1){
+if(serialport == 1){
   SerialUSB.println(sendresponse);
-} else if (serialport = 2){
+} else if (serialport == 2){
   Serial1.println(sendresponse);
-  }else if (serialport = 3){
+  }else if (serialport == 3){
     Serial.println(sendresponse);
     }else{
       errorstring = errorstring + " Error: Unknown port reply";
@@ -456,11 +459,11 @@ scpi_error_t get_int1(struct scpi_parser_context* context, struct scpi_token* co
 {
    // Read the temperature of the thermocouple. This temp is compensated for cold junction temperature.
     sendresponse = String(thermocouple1.readInternal());            
-if(serialport = 1){
+if(serialport == 1){
   SerialUSB.println(sendresponse);
-} else if (serialport = 2){
+} else if (serialport == 2){
   Serial1.println(sendresponse);
-  }else if (serialport = 3){
+  }else if (serialport == 3){
     Serial.println(sendresponse);
     }else{
       errorstring = errorstring + " Error: Unknown port reply";
@@ -476,11 +479,11 @@ scpi_error_t get_int2(struct scpi_parser_context* context, struct scpi_token* co
 {
    // Read the temperature of the thermocouple. This temp is compensated for cold junction temperature.
     sendresponse = String(thermocouple2.readInternal());            
-if(serialport = 1){
+if(serialport == 1){
   SerialUSB.println(sendresponse);
-} else if (serialport = 2){
+} else if (serialport == 2){
   Serial1.println(sendresponse);
-  }else if (serialport = 3){
+  }else if (serialport == 3){
     Serial.println(sendresponse);
     }else{
       errorstring = errorstring + " Error: Unknown port reply";
@@ -501,11 +504,11 @@ scpi_error_t get_int3(struct scpi_parser_context* context, struct scpi_token* co
     sendresponse = String(thermocouple3.readInternal());  
  }
          
-if(serialport = 1){
+if(serialport == 1){
   SerialUSB.println(sendresponse);
-} else if (serialport = 2){
+} else if (serialport == 2){
   Serial1.println(sendresponse);
-  }else if (serialport = 3){
+  }else if (serialport == 3){
     Serial.println(sendresponse);
     }else{
       errorstring = errorstring + " Error: Unknown port reply";
@@ -524,11 +527,11 @@ scpi_error_t get_int4(struct scpi_parser_context* context, struct scpi_token* co
  else{
     sendresponse = String(thermocouple4.readInternal());            
  }
-if(serialport = 1){
+if(serialport == 1){
   SerialUSB.println(sendresponse);
-} else if (serialport = 2){
+} else if (serialport == 2){
   Serial1.println(sendresponse);
-  }else if (serialport = 3){
+  }else if (serialport == 3){
     Serial.println(sendresponse);
     }else{
       errorstring = errorstring + " Error: Unknown port reply";
@@ -545,11 +548,11 @@ scpi_error_t get_err(struct scpi_parser_context* context, struct scpi_token* com
 {
       sendresponse = String(errorstring);
       errorstring = "";            
-if(serialport = 1){
+if(serialport == 1){
   SerialUSB.println(sendresponse);
-} else if (serialport = 2){
+} else if (serialport == 2){
   Serial1.println(sendresponse);
-  }else if (serialport = 3){
+  }else if (serialport == 3){
     Serial.println(sendresponse);
     }else{
       }
