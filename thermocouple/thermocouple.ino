@@ -1,14 +1,32 @@
+/*
+ * Thermocouple SCPI Meter by Thomas S. Knutsen LA3PNA. 
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject
+ * to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR
+ * ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+ * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+ 
  #include <U8g2lib.h>
  #include <U8x8lib.h>
  #include <avr/dtostrf.h>
  #include <SPI.h>
   #include <scpiparser.h>
  #include "Adafruit_MAX31855.h"
-
-  //
-  //  #define use4 // Undefine for only 2 thermocouple amplifiers
-  //  Should make a method using D2 to switch between 2 and 4 probe versions. 
-  //
  
     #define DO   7
     #define CS1   9
@@ -562,14 +580,11 @@ for(int m=0;m<20;m++){
     break;
       }
   }
-  SerialUSB.println(val);
-   SerialUSB.println(mychar);
    if((start > 0)&& (l > start)){
     for(int j = start+1; j < l; j++){
      mychar[j-start-1]=val[j];
       }
    }
-   SerialUSB.println(mychar);
 u8g2.firstPage();
   do {
     
@@ -577,6 +592,7 @@ u8g2.firstPage();
    u8g2.drawStr(10,18,mychar);
     
   } while ( u8g2.nextPage() );
+  
 scpi_free_tokens(command);
   return SCPI_SUCCESS;
 }
