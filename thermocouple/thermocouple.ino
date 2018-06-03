@@ -1,6 +1,8 @@
 /*
  * Thermocouple SCPI Meter by Thomas S. Knutsen LA3PNA. 
  * 
+ * 
+ * 
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
  * "Software"), to deal in the Software without restriction, including
@@ -19,6 +21,7 @@
  * ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * 
  */
  
  #include <U8g2lib.h>
@@ -78,8 +81,6 @@ void draw(float temp1, float temp2, float temp3, float temp4 ) {
   u8g2.firstPage();
   do {
     u8g2.setFont(u8g2_font_ncenB10_tr);
-    // u8g2.setFont(u8g2_font_courB18);
-//   u8g2.setFont(u8g2_font_osb21);
     char buf[12] ="";
     if(use2){
      u8g2.drawStr(0,25,dtostrf(temp1, 4, 2, buf));
@@ -250,6 +251,7 @@ void setup_scpi(){
   
   scpi_register_command(measure, SCPI_CL_CHILD, "INTernal1?", 10, "INT1?", 5, get_int1);
   scpi_register_command(measure, SCPI_CL_CHILD, "INTernal2?", 10, "INT2?", 5, get_int2);
+  
   // NEED A DEFINE FOR 4 MEASUREMENTS, NEED TO IMPLEMENT THE SWITCHING IN SETUP
 if(!use2){
   scpi_register_command(measure, SCPI_CL_CHILD, "TEMPerature3?", 13, "TEMP3?", 6, get_temp3);
@@ -257,13 +259,13 @@ if(!use2){
   scpi_register_command(measure, SCPI_CL_CHILD, "INTernal3?", 10, "INT3?", 5, get_int3);
   scpi_register_command(measure, SCPI_CL_CHILD, "INTernal4?", 10, "INT4?", 5, get_int4);
 }
-//  scpi_register_command(unit, SCPI_CL_CHILD, "TEMPerature", 11, "TEMP", 4, get_voltage_3);
-//  scpi_register_command(unit, SCPI_CL_CHILD, "TEMPerature?", 12, "TEMP?", 5, get_voltage_3);
 
   scpi_register_command(systems, SCPI_CL_CHILD, "ERRor?", 6, "ERR?", 4, get_err);
-  scpi_register_command(systems, SCPI_CL_CHILD, "VOLTage?", 8, "VOLT?", 5, get_voltage); // this does not work?
+  scpi_register_command(systems, SCPI_CL_CHILD, "VOLTage?", 8, "VOLT?", 5, get_voltage); 
   scpi_register_command(systems, SCPI_CL_CHILD, "PRINT", 5, "PRINT", 5, display_print); 
   }
+
+  // from here down is the different command definitions.
 
   scpi_error_t identify(struct scpi_parser_context* context, struct scpi_token* command)
 {
