@@ -166,7 +166,7 @@ void draw(float temp1, float temp2, float temp3, float temp4 ) {
        double    internalTemp2 = thermocouple2.readInternal(); // Read the internal temperature of the MAX31855.
       double  rawTemp2 = thermocouple2.readCelsius(); // Read the temperature of the thermocouple. This temp is compensated for cold junction temperature.
        
-   correctedTemp = internalTemp2;// calc_temp(internalTemp, rawTemp);
+   correctedTemp = rawTemp2;// calc_temp(internalTemp, rawTemp);
  if(_verbose){  
   SerialUSB.print("Corrected Temp2 = ");
           SerialUSB.print(correctedTemp, 5);
