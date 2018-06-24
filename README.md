@@ -41,3 +41,5 @@ SCPI Commands:
    - U8g2lib (Available in arduino library manager)
    - Open Instrument control [scpiparser] ( https://github.com/la3pna/oic )
    - Adafruit MAX31855 (available in arduino library manager) (intend to rewrite this to use some SAMD features in getting the data) 
+   
+   Bevare that there is some fake MAX31855 on the marked that does not work! Make sure you get your MAX31855 and thermocouples from a reputable source to avoid problems.  
