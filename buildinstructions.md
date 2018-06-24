@@ -1,6 +1,6 @@
 **Build instructions**
 
-The PCB fits the standard chinese 100*76*35mm aluminium enclosures available on ebay. 
+The PCB fits the standard chinese 100 * 76 * 35mm aluminium enclosures available on ebay. 
 PCB's and front panels may be available from me, contact me for information. 
 
 * Mount and solder the SMD's on the main PCB. 
