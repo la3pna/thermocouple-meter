@@ -9051,8 +9051,8 @@ W = angled&lt;p&gt;
 </classes>
 <parts>
 <part name="U$1" library="mine" deviceset="EPHYREAN" device=""/>
-<part name="IC1" library="adafruit" deviceset="MAX6675" device=""/>
-<part name="IC2" library="adafruit" deviceset="MAX6675" device=""/>
+<part name="IC1" library="adafruit" deviceset="MAX6675" device="" value="MAX31855"/>
+<part name="IC2" library="adafruit" deviceset="MAX6675" device="" value="MAX31855"/>
 <part name="+3V1" library="supply1" deviceset="+3V3" device=""/>
 <part name="GND1" library="supply1" deviceset="GND" device=""/>
 <part name="GND2" library="supply1" deviceset="GND" device=""/>
