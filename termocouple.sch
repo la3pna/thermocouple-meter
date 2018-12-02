@@ -9094,6 +9094,10 @@ W = angled&lt;p&gt;
 <part name="GND4" library="supply1" deviceset="GND" device=""/>
 <part name="+3V2" library="supply1" deviceset="+3V3" device=""/>
 <part name="+3V3" library="supply1" deviceset="+3V3" device=""/>
+<part name="C1" library="rcl" deviceset="C-EU" device="C1206" value="100n"/>
+<part name="C2" library="rcl" deviceset="C-EU" device="C1206" value="100n"/>
+<part name="GND15" library="supply1" deviceset="GND" device=""/>
+<part name="GND16" library="supply1" deviceset="GND" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -9163,6 +9167,10 @@ panel</text>
 <instance part="GND4" gate="1" x="-17.78" y="68.58" rot="R270"/>
 <instance part="+3V2" gate="G$1" x="76.2" y="86.36"/>
 <instance part="+3V3" gate="G$1" x="-10.16" y="78.74"/>
+<instance part="C1" gate="G$1" x="-17.78" y="25.4"/>
+<instance part="C2" gate="G$1" x="-22.86" y="-5.08"/>
+<instance part="GND15" gate="1" x="-17.78" y="17.78"/>
+<instance part="GND16" gate="1" x="-22.86" y="-12.7"/>
 </instances>
 <busses>
 </busses>
@@ -9210,6 +9218,10 @@ panel</text>
 <wire x1="-17.78" y1="-2.54" x2="-22.86" y2="-2.54" width="0.1524" layer="91"/>
 <pinref part="+3V1" gate="G$1" pin="+3V3"/>
 <junction x="-22.86" y="22.86"/>
+<pinref part="C1" gate="G$1" pin="1"/>
+<junction x="-17.78" y="27.94"/>
+<pinref part="C2" gate="G$1" pin="1"/>
+<junction x="-22.86" y="-2.54"/>
 </segment>
 <segment>
 <pinref part="X1" gate="-1" pin="1"/>
@@ -9301,6 +9313,14 @@ panel</text>
 <pinref part="SV1" gate="G$1" pin="6"/>
 <pinref part="GND4" gate="1" pin="GND"/>
 <wire x1="-15.24" y1="68.58" x2="-10.16" y2="68.58" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="C1" gate="G$1" pin="2"/>
+<pinref part="GND15" gate="1" pin="GND"/>
+</segment>
+<segment>
+<pinref part="C2" gate="G$1" pin="2"/>
+<pinref part="GND16" gate="1" pin="GND"/>
 </segment>
 </net>
 <net name="N$4" class="0">

@@ -78,7 +78,7 @@
 <wire x1="64.4525" y1="6.0325" x2="64.4525" y2="30.785" width="0" layer="20"/>
 <wire x1="64.4525" y1="30.785" x2="9.525" y2="30.785" width="0" layer="20"/>
 <wire x1="9.525" y1="30.785" x2="9.525" y2="6.0325" width="0" layer="20"/>
-<wire x1="13.6525" y1="4.1275" x2="10.4775" y2="4.1275" width="0" layer="20"/>
+<wire x1="14.2875" y1="4.1275" x2="10.4775" y2="4.1275" width="0" layer="20"/>
 <wire x1="10.4775" y1="4.1275" x2="10.4775" y2="0" width="0" layer="20"/>
 <text x="61.9125" y="22.225" size="1.778" layer="16" font="vector" rot="MR0">UNIVERSAL
 FRONT PANEL
@@ -88,8 +88,8 @@ FRONT PANEL
 LA3PNA 2018</text>
 <dimension x1="59.055" y1="4.1275" x2="36.195" y2="4.1275" x3="47.625" y3="8.5725" textsize="1.778" layer="21"/>
 <dimension x1="13.6525" y1="4.1275" x2="36.5125" y2="4.1275" x3="25.0825" y3="9.140871875" textsize="1.778" layer="25"/>
-<wire x1="9.525" y1="6.0325" x2="13.6525" y2="6.0325" width="0" layer="20"/>
-<wire x1="13.6525" y1="6.0325" x2="13.6525" y2="4.1275" width="0" layer="20"/>
+<wire x1="9.525" y1="6.0325" x2="14.2875" y2="6.0325" width="0" layer="20"/>
+<wire x1="14.2875" y1="6.0325" x2="14.2875" y2="4.1275" width="0" layer="20"/>
 </plain>
 <libraries>
 <library name="con-phoenix-254">
