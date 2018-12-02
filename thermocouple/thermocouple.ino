@@ -30,6 +30,11 @@
  #include <SPI.h>
   #include <scpiparser.h>
  #include "Adafruit_MAX31855.h"
+
+// In this list you define the input voltage resistors in ohm so it measures the input voltage correctly:
+float r44 = 2700; // resistor to gnd
+float r43 = 30100; // resistor to Vin
+ 
  
     #define DO   7
     #define CS1   9
@@ -325,8 +330,9 @@ scpi_error_t get_voltage(struct scpi_parser_context* context, struct scpi_token*
   scpi_free_tokens(command);
   SerialUSB.println("test to see if its a logic fault or this does not run");
   
-  float volt = analogRead(A0)*((47+5700)/47)*(3.3/1024);
-  sendresponse = "Analog read: " + String(volt) + " V";            
+  float volt = analogRead(A0)*((r44)/(r44+r43))*(3.3/1024);
+ float divisor = ((r44)/(r44+r43));
+  sendresponse = "Power supply voltage: " + String(volt) + " V";          
 if(serialport == 1){
   SerialUSB.println(sendresponse);
 } else if (serialport == 2){
