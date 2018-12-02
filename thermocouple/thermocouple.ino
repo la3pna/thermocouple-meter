@@ -37,8 +37,8 @@ float r43 = 30100; // resistor to Vin
  
  
     #define DO   7
-    #define CS1   9
-    #define CS2   10
+    #define CS1   10
+    #define CS2   9
     #define CS3   11
     #define CS4   12
     #define CLK  8
