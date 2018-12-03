@@ -3197,28 +3197,6 @@ Source: http://www.murata.com .. GRM43DR72E224KW01.pdf</description>
 <rectangle x1="-1.4" y1="-1.6" x2="-1.1" y2="1.6" layer="51"/>
 <rectangle x1="1.1" y1="-1.6" x2="1.4" y2="1.6" layer="51" rot="R180"/>
 </package>
-<package name="PRL1632">
-<description>&lt;b&gt;PRL1632 are realized as 1W for 3.2 × 1.6mm(1206)&lt;/b&gt;&lt;p&gt;
-Source: http://www.mouser.com/ds/2/392/products_18-2245.pdf</description>
-<wire x1="0.7275" y1="-1.5228" x2="-0.7277" y2="-1.5228" width="0.1524" layer="51"/>
-<wire x1="0.7275" y1="1.5228" x2="-0.7152" y2="1.5228" width="0.1524" layer="51"/>
-<smd name="2" x="0.822" y="0" dx="1" dy="3.2" layer="1"/>
-<smd name="1" x="-0.822" y="0" dx="1" dy="3.2" layer="1"/>
-<text x="-1.4" y="1.8" size="1.27" layer="25">&gt;NAME</text>
-<text x="-1.4" y="-3" size="1.27" layer="27">&gt;VALUE</text>
-<rectangle x1="-0.8" y1="-1.6" x2="-0.4" y2="1.6" layer="51"/>
-<rectangle x1="0.4" y1="-1.6" x2="0.8" y2="1.6" layer="51"/>
-</package>
-<package name="R01005">
-<smd name="1" x="-0.1625" y="0" dx="0.2" dy="0.25" layer="1"/>
-<smd name="2" x="0.1625" y="0" dx="0.2" dy="0.25" layer="1"/>
-<text x="-0.4" y="0.3" size="1.27" layer="25">&gt;NAME</text>
-<text x="-0.4" y="-1.6" size="1.27" layer="27">&gt;VALUE</text>
-<rectangle x1="-0.2" y1="-0.1" x2="-0.075" y2="0.1" layer="51"/>
-<rectangle x1="0.075" y1="-0.1" x2="0.2" y2="0.1" layer="51"/>
-<rectangle x1="-0.15" y1="0.05" x2="0.15" y2="0.1" layer="51"/>
-<rectangle x1="-0.15" y1="-0.1" x2="0.15" y2="-0.05" layer="51"/>
-</package>
 <package name="C0402">
 <description>&lt;b&gt;CAPACITOR&lt;/b&gt;</description>
 <wire x1="-0.245" y1="0.224" x2="0.245" y2="0.224" width="0.1524" layer="51"/>
@@ -4794,6 +4772,22 @@ Source: AVX .. aphvc.pdf</description>
 <rectangle x1="0.2588" y1="-0.3048" x2="0.5588" y2="0.2951" layer="51"/>
 <rectangle x1="-0.1999" y1="-0.3" x2="0.1999" y2="0.3" layer="35"/>
 </package>
+<package name="R1005">
+<description>&lt;b&gt;RESISTOR&lt;/b&gt;</description>
+<wire x1="-0.245" y1="0.224" x2="0.245" y2="0.224" width="0.1524" layer="51"/>
+<wire x1="0.245" y1="-0.224" x2="-0.245" y2="-0.224" width="0.1524" layer="51"/>
+<wire x1="-1.473" y1="0.483" x2="1.473" y2="0.483" width="0.0508" layer="39"/>
+<wire x1="1.473" y1="0.483" x2="1.473" y2="-0.483" width="0.0508" layer="39"/>
+<wire x1="1.473" y1="-0.483" x2="-1.473" y2="-0.483" width="0.0508" layer="39"/>
+<wire x1="-1.473" y1="-0.483" x2="-1.473" y2="0.483" width="0.0508" layer="39"/>
+<smd name="1" x="-0.65" y="0" dx="0.7" dy="0.9" layer="1"/>
+<smd name="2" x="0.65" y="0" dx="0.7" dy="0.9" layer="1"/>
+<text x="-0.635" y="0.635" size="1.27" layer="25">&gt;NAME</text>
+<text x="-0.635" y="-1.905" size="1.27" layer="27">&gt;VALUE</text>
+<rectangle x1="-0.554" y1="-0.3048" x2="-0.254" y2="0.2951" layer="51"/>
+<rectangle x1="0.2588" y1="-0.3048" x2="0.5588" y2="0.2951" layer="51"/>
+<rectangle x1="-0.1999" y1="-0.3" x2="0.1999" y2="0.3" layer="35"/>
+</package>
 </packages>
 <symbols>
 <symbol name="R-EU">
@@ -4852,6 +4846,15 @@ Source: AVX .. aphvc.pdf</description>
 </technologies>
 </device>
 <device name="R0805W" package="R0805W">
+<connects>
+<connect gate="G$1" pin="1" pad="1"/>
+<connect gate="G$1" pin="2" pad="2"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+<device name="R1005" package="R1005">
 <connects>
 <connect gate="G$1" pin="1" pad="1"/>
 <connect gate="G$1" pin="2" pad="2"/>
@@ -5572,24 +5575,6 @@ Source: AVX .. aphvc.pdf</description>
 </technologies>
 </device>
 <device name="1812X7R" package="1812X7R">
-<connects>
-<connect gate="G$1" pin="1" pad="1"/>
-<connect gate="G$1" pin="2" pad="2"/>
-</connects>
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-<device name="PRL1632" package="PRL1632">
-<connects>
-<connect gate="G$1" pin="1" pad="1"/>
-<connect gate="G$1" pin="2" pad="2"/>
-</connects>
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-<device name="01005" package="R01005">
 <connects>
 <connect gate="G$1" pin="1" pad="1"/>
 <connect gate="G$1" pin="2" pad="2"/>
@@ -6515,7 +6500,7 @@ Marquardt, Siemens, C&amp;K, ITT, and others&lt;p&gt;
 <packages>
 <package name="LPV-1">
 <description>&lt;b&gt;TOGGLE SWITCH&lt;/b&gt;</description>
-<wire x1="-4.064" y1="0" x2="-4.064" y2="13.208" width="0.1524" layer="21"/>
+<wire x1="-4.064" y1="0" x2="-4.064" y2="9.398" width="0.1524" layer="21"/>
 <wire x1="-4.064" y1="0" x2="-3.683" y2="0" width="0.1524" layer="51"/>
 <wire x1="-3.683" y1="0" x2="-3.683" y2="-0.254" width="0.1524" layer="51"/>
 <wire x1="3.683" y1="-0.254" x2="3.429" y2="-0.254" width="0.1524" layer="51"/>
@@ -6539,14 +6524,14 @@ Marquardt, Siemens, C&amp;K, ITT, and others&lt;p&gt;
 <wire x1="1.27" y1="-15.24" x2="0.889" y2="-7.493" width="0.1524" layer="21"/>
 <wire x1="0.889" y1="-7.493" x2="2.159" y2="-7.493" width="0.1524" layer="21"/>
 <wire x1="-0.889" y1="-7.493" x2="0.889" y2="-7.493" width="0.1524" layer="21"/>
-<wire x1="3.937" y1="13.335" x2="2.54" y2="13.335" width="0.1524" layer="21"/>
-<wire x1="2.54" y1="13.208" x2="2.54" y2="13.335" width="0.1524" layer="21"/>
-<wire x1="-2.54" y1="13.208" x2="-2.54" y2="13.335" width="0.1524" layer="21"/>
-<wire x1="3.937" y1="13.335" x2="4.064" y2="13.208" width="0.1524" layer="21"/>
-<wire x1="4.064" y1="13.208" x2="4.064" y2="0" width="0.1524" layer="21"/>
-<wire x1="-4.064" y1="13.208" x2="-3.937" y2="13.335" width="0.1524" layer="21"/>
-<wire x1="-3.937" y1="13.335" x2="-2.54" y2="13.335" width="0.1524" layer="21"/>
-<wire x1="-2.54" y1="13.208" x2="2.54" y2="13.208" width="0.1524" layer="21"/>
+<wire x1="3.937" y1="9.525" x2="2.54" y2="9.525" width="0.1524" layer="21"/>
+<wire x1="2.54" y1="9.398" x2="2.54" y2="9.525" width="0.1524" layer="21"/>
+<wire x1="-2.54" y1="9.398" x2="-2.54" y2="9.525" width="0.1524" layer="21"/>
+<wire x1="3.937" y1="9.525" x2="4.064" y2="9.398" width="0.1524" layer="21"/>
+<wire x1="4.064" y1="9.398" x2="4.064" y2="0" width="0.1524" layer="21"/>
+<wire x1="-4.064" y1="9.398" x2="-3.937" y2="9.525" width="0.1524" layer="21"/>
+<wire x1="-3.937" y1="9.525" x2="-2.54" y2="9.525" width="0.1524" layer="21"/>
+<wire x1="-2.54" y1="9.398" x2="2.54" y2="9.398" width="0.1524" layer="21"/>
 <wire x1="2.54" y1="-0.889" x2="2.54" y2="-1.397" width="0.1524" layer="51"/>
 <wire x1="2.54" y1="-1.397" x2="2.54" y2="-7.112" width="0.1524" layer="21"/>
 <wire x1="2.54" y1="-0.889" x2="1.397" y2="-0.889" width="0.1524" layer="51"/>
@@ -6562,19 +6547,19 @@ Marquardt, Siemens, C&amp;K, ITT, and others&lt;p&gt;
 <wire x1="-2.54" y1="-0.889" x2="-3.429" y2="-0.889" width="0.1524" layer="51"/>
 <wire x1="-2.54" y1="-0.889" x2="-2.54" y2="-1.397" width="0.1524" layer="51"/>
 <wire x1="-2.54" y1="-1.397" x2="-2.54" y2="-7.112" width="0.1524" layer="21"/>
-<pad name="1" x="0" y="15.24" drill="1.6002" shape="long"/>
-<pad name="2" x="0" y="20.32" drill="1.6002" shape="long"/>
-<pad name="3" x="0" y="25.4" drill="1.6002" shape="long"/>
+<pad name="1" x="0" y="11.43" drill="1.6002" shape="long"/>
+<pad name="2" x="0" y="15.24" drill="1.6002" shape="long"/>
+<pad name="3" x="0" y="19.05" drill="1.6002" shape="long"/>
 <pad name="B1" x="2.54" y="0" drill="1.6002" diameter="2.54"/>
 <pad name="B" x="-2.54" y="0" drill="1.6002" diameter="2.54"/>
 <text x="3.429" y="14.097" size="1.778" layer="27" ratio="10" rot="R90">&gt;VALUE</text>
 <text x="-1.778" y="14.097" size="1.778" layer="25" ratio="10" rot="R90">&gt;NAME</text>
-<rectangle x1="-0.635" y1="13.208" x2="0.635" y2="13.97" layer="21"/>
-<rectangle x1="-0.635" y1="16.51" x2="0.635" y2="19.05" layer="21"/>
-<rectangle x1="-0.635" y1="21.59" x2="0.635" y2="24.13" layer="21"/>
+<rectangle x1="-0.635" y1="9.398" x2="0.635" y2="10.16" layer="21"/>
+<rectangle x1="-0.635" y1="12.7" x2="0.635" y2="15.24" layer="21"/>
+<rectangle x1="-0.635" y1="15.24" x2="0.635" y2="17.78" layer="21"/>
+<rectangle x1="-0.635" y1="10.16" x2="0.635" y2="12.7" layer="51"/>
 <rectangle x1="-0.635" y1="13.97" x2="0.635" y2="16.51" layer="51"/>
-<rectangle x1="-0.635" y1="19.05" x2="0.635" y2="21.59" layer="51"/>
-<rectangle x1="-0.635" y1="24.13" x2="0.635" y2="25.781" layer="51"/>
+<rectangle x1="-0.635" y1="17.78" x2="0.635" y2="19.431" layer="51"/>
 <rectangle x1="3.429" y1="0" x2="4.064" y2="1.143" layer="51"/>
 <rectangle x1="3.429" y1="1.143" x2="4.064" y2="7.62" layer="21"/>
 <rectangle x1="-1.016" y1="0" x2="1.016" y2="3.81" layer="21"/>
