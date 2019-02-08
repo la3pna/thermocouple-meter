@@ -9023,6 +9023,48 @@ W = angled&lt;p&gt;
 </deviceset>
 </devicesets>
 </library>
+<library name="tracker">
+<description>Generated from &lt;b&gt;tracker.sch&lt;/b&gt;&lt;p&gt;
+by exp-lbrs.ulp</description>
+<packages>
+<package name="FIDUCIAL_1MM">
+<smd name="1" x="0" y="0" dx="1" dy="1" layer="1" roundness="100" stop="no" cream="no"/>
+<polygon width="0.127" layer="29">
+<vertex x="-1" y="0" curve="90"/>
+<vertex x="0" y="-1" curve="90"/>
+<vertex x="1" y="0" curve="90"/>
+<vertex x="0" y="1" curve="90"/>
+</polygon>
+<polygon width="0.127" layer="41">
+<vertex x="-1" y="0" curve="90"/>
+<vertex x="0" y="-1" curve="90"/>
+<vertex x="1" y="0" curve="90"/>
+<vertex x="0" y="1" curve="90"/>
+</polygon>
+</package>
+</packages>
+<symbols>
+<symbol name="DOT">
+<circle x="0" y="0" radius="2.54" width="0.254" layer="94"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="FIDUCIAL">
+<description>For use by pick and place machines to calibrate the vision/machine, 1mm
+&lt;p&gt;By microbuilder.eu&lt;/p&gt;</description>
+<gates>
+<gate name="G$1" symbol="DOT" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="FIDUCIAL_1MM">
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -9083,6 +9125,10 @@ W = angled&lt;p&gt;
 <part name="C2" library="rcl" deviceset="C-EU" device="C1206" value="100n"/>
 <part name="GND15" library="supply1" deviceset="GND" device=""/>
 <part name="GND16" library="supply1" deviceset="GND" device=""/>
+<part name="U$4" library="tracker" deviceset="FIDUCIAL" device=""/>
+<part name="U$5" library="tracker" deviceset="FIDUCIAL" device=""/>
+<part name="U$6" library="tracker" deviceset="FIDUCIAL" device=""/>
+<part name="U$7" library="tracker" deviceset="FIDUCIAL" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -9156,6 +9202,10 @@ panel</text>
 <instance part="C2" gate="G$1" x="-22.86" y="-5.08"/>
 <instance part="GND15" gate="1" x="-17.78" y="17.78"/>
 <instance part="GND16" gate="1" x="-22.86" y="-12.7"/>
+<instance part="U$4" gate="G$1" x="12.7" y="81.28"/>
+<instance part="U$5" gate="G$1" x="17.78" y="81.28"/>
+<instance part="U$6" gate="G$1" x="22.86" y="81.28"/>
+<instance part="U$7" gate="G$1" x="27.94" y="81.28"/>
 </instances>
 <busses>
 </busses>

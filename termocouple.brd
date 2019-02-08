@@ -1759,6 +1759,27 @@ W = angled&lt;p&gt;
 </package>
 </packages>
 </library>
+<library name="tracker">
+<description>Generated from &lt;b&gt;tracker.sch&lt;/b&gt;&lt;p&gt;
+by exp-lbrs.ulp</description>
+<packages>
+<package name="FIDUCIAL_1MM">
+<smd name="1" x="0" y="0" dx="1" dy="1" layer="1" roundness="100" stop="no" cream="no"/>
+<polygon width="0.127" layer="29">
+<vertex x="-1" y="0" curve="90"/>
+<vertex x="0" y="-1" curve="90"/>
+<vertex x="1" y="0" curve="90"/>
+<vertex x="0" y="1" curve="90"/>
+</polygon>
+<polygon width="0.127" layer="41">
+<vertex x="-1" y="0" curve="90"/>
+<vertex x="0" y="-1" curve="90"/>
+<vertex x="1" y="0" curve="90"/>
+<vertex x="0" y="1" curve="90"/>
+</polygon>
+</package>
+</packages>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -1770,7 +1791,7 @@ W = angled&lt;p&gt;
 <class number="1" name="power" width="0.4064" drill="0">
 </class>
 </classes>
-<designrules name="default">
+<designrules name="default *">
 <description language="de">&lt;b&gt;EAGLE Design Rules&lt;/b&gt;
 &lt;p&gt;
 Die Standard-Design-Rules sind so gewählt, dass sie für 
@@ -1838,7 +1859,7 @@ design rules under a new name.</description>
 <param name="mlMaxStopFrame" value="4mil"/>
 <param name="mlMinCreamFrame" value="0mil"/>
 <param name="mlMaxCreamFrame" value="0mil"/>
-<param name="mlViaStopLimit" value="0mil"/>
+<param name="mlViaStopLimit" value="0.7mm"/>
 <param name="srRoundness" value="0"/>
 <param name="srMinRoundness" value="0mil"/>
 <param name="srMaxRoundness" value="0mil"/>
@@ -1993,6 +2014,10 @@ design rules under a new name.</description>
 </element>
 <element name="C1" library="rcl" package="C1206" value="100n" x="48.26" y="35.56" rot="R90"/>
 <element name="C2" library="rcl" package="C1206" value="100n" x="64.77" y="35.56" rot="R90"/>
+<element name="U$4" library="tracker" package="FIDUCIAL_1MM" value="FIDUCIAL" x="5.08" y="97.155"/>
+<element name="U$5" library="tracker" package="FIDUCIAL_1MM" value="FIDUCIAL" x="64.77" y="3.175"/>
+<element name="U$6" library="tracker" package="FIDUCIAL_1MM" value="FIDUCIAL" x="56.515" y="97.79"/>
+<element name="U$7" library="tracker" package="FIDUCIAL_1MM" value="FIDUCIAL" x="4.445" y="2.54"/>
 </elements>
 <signals>
 <signal name="N$1">
